@@ -313,21 +313,21 @@ export const SettingsDataView: React.FC<SettingsDataViewProps> = ({
           <h3 className="font-display text-sm font-semibold text-slate-900 border-b border-slate-100 pb-3">
             Lịch góp vốn, vay vốn & trả nợ theo tháng (T1 – T12)
           </h3>
-          <div className="mt-3 max-h-[340px] overflow-y-auto">
+          <div className="mt-3 max-h-[340px] overflow-x-auto overflow-y-auto">
             <table className="w-full border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">
-                  <th className="py-2">Tháng</th>
-                  <th className="py-2 text-right">Vốn góp nhận</th>
-                  <th className="py-2 text-right">Giải ngân vay</th>
-                  <th className="py-2 text-right">Trả gốc vay</th>
-                  <th className="py-2 text-right">Trả lãi vay</th>
+                  <th className="py-2 pr-2 whitespace-nowrap">Tháng</th>
+                  <th className="py-2 px-1 text-right whitespace-nowrap">Vốn góp nhận</th>
+                  <th className="py-2 px-1 text-right whitespace-nowrap">Giải ngân vay</th>
+                  <th className="py-2 px-1 text-right whitespace-nowrap">Trả gốc vay</th>
+                  <th className="py-2 px-1 text-right whitespace-nowrap">Trả lãi vay</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {Array.from({ length: 12 }, (_, idx) => (
                   <tr key={idx}>
-                    <td className="py-1.5 font-num font-medium text-slate-700">
+                    <td className="py-1.5 pr-2 font-num font-medium text-slate-700 whitespace-nowrap">
                       T{idx + 1}
                     </td>
                     <td className="py-1 px-1">
@@ -404,23 +404,31 @@ export const SettingsDataView: React.FC<SettingsDataViewProps> = ({
             <table className="w-full border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                  <th className="px-3 py-2">Mã</th>
-                  <th className="px-3 py-2">Nội dung kiểm thử</th>
-                  <th className="px-3 py-2">Kết quả kỳ vọng</th>
-                  <th className="px-3 py-2">Hệ thống tính</th>
-                  <th className="px-3 py-2 text-right">Kết luận</th>
+                  <th className="px-3 py-2 whitespace-nowrap">Mã</th>
+                  <th className="px-3 py-2 max-w-[240px]">Nội dung kiểm thử</th>
+                  <th className="px-3 py-2 max-w-[240px]">Kết quả kỳ vọng</th>
+                  <th className="px-3 py-2 whitespace-nowrap">Hệ thống tính</th>
+                  <th className="px-3 py-2 text-right whitespace-nowrap">Kết luận</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {verificationResults.map((vr) => (
                   <tr key={vr.id}>
-                    <td className="px-3 py-2 font-num text-slate-500">{vr.id}</td>
-                    <td className="px-3 py-2 font-medium text-slate-900">
+                    <td className="px-3 py-2 font-num text-slate-500 whitespace-nowrap">{vr.id}</td>
+                    <td
+                      title={vr.title}
+                      className="px-3 py-2 max-w-[240px] truncate font-medium text-slate-900"
+                    >
                       {vr.title}
                     </td>
-                    <td className="px-3 py-2 text-slate-600">{vr.expected}</td>
-                    <td className="px-3 py-2 font-num text-slate-800">{vr.actual}</td>
-                    <td className="px-3 py-2 text-right">
+                    <td
+                      title={vr.expected}
+                      className="px-3 py-2 max-w-[240px] truncate text-slate-600"
+                    >
+                      {vr.expected}
+                    </td>
+                    <td className="px-3 py-2 font-num text-slate-800 whitespace-nowrap">{vr.actual}</td>
+                    <td className="px-3 py-2 text-right whitespace-nowrap">
                       {vr.passed ? (
                         <span className="inline-flex items-center gap-1 font-medium text-emerald-700">
                           <CheckCircle2 className="h-3.5 w-3.5" />

@@ -304,23 +304,23 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1160px] border-collapse text-left text-xs">
+              <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                    <th className="px-3 py-2.5">Mã</th>
-                    <th className="px-3 py-2.5 min-w-[180px]">Tên sản phẩm</th>
-                    <th className="px-2 py-2.5">Nhóm</th>
-                    <th className="px-2 py-2.5">Nguồn cung</th>
-                    <th className="px-2 py-2.5">Định giá theo</th>
-                    <th className="px-2 py-2.5 text-right">TL sống/đv (kg)</th>
-                    <th className="px-2 py-2.5 text-right">Giá/kg sống</th>
-                    <th className="px-2 py-2.5 text-right">Thu hồi (%)</th>
-                    <th className="px-2 py-2.5 text-right">Hao hụt TM (%)</th>
-                    <th className="px-2 py-2.5 text-right bg-slate-100">TL TP (kg)</th>
-                    <th className="px-2 py-2.5 text-right bg-slate-100">Giá vốn/đv bán</th>
-                    <th className="px-2 py-2.5 text-right">Giá bán MT</th>
-                    <th className="px-2 py-2.5">Trạng thái</th>
-                    <th className="px-3 py-2.5 text-right">Thao tác</th>
+                    <th className="px-2.5 py-2.5 whitespace-nowrap">Mã</th>
+                    <th className="px-2 py-2.5 w-[165px] max-w-[165px]">Tên sản phẩm</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Nhóm</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Nguồn cung</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Định giá</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap" title="Trọng lượng sống / đơn vị (kg)">TL sống (kg)</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Giá/kg sống</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Thu hồi (%)</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap" title="Hao hụt thương mại (%)">Hao hụt (%)</th>
+                    <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap" title="Trọng lượng thành phẩm (kg)">TL TP (kg)</th>
+                    <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">Giá vốn/đv</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Giá bán MT</th>
+                    <th className="px-2 py-2.5 whitespace-nowrap">Trạng thái</th>
+                    <th className="px-2.5 py-2.5 text-right whitespace-nowrap">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -335,16 +335,16 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                           isSelected ? 'bg-emerald-50/40' : 'hover:bg-slate-50/80'
                         }`}
                       >
-                        <td className="px-3 py-2 font-num text-[11px] font-medium text-slate-600">
+                        <td className="px-2.5 py-2 font-num text-[11px] font-medium text-slate-600 whitespace-nowrap">
                           {p.id}
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[165px] max-w-[165px]">
                           <TextCell
                             value={p.name}
                             onChange={(v) => updateProduct(p.id, { name: v })}
                           />
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <select
                             value={p.group}
                             onChange={(e) =>
@@ -363,7 +363,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             )}
                           </select>
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <select
                             value={p.supplyType}
                             onChange={(e) => {
@@ -397,7 +397,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             <option value="self_farmed">Tự sản xuất</option>
                           </select>
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <select
                             value={p.pricingUnit}
                             onChange={(e) =>
@@ -412,7 +412,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             <option value="per_unit">Theo đơn vị</option>
                           </select>
                         </td>
-                        <td className="px-1 py-1.5 w-24">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={p.avgLiveWeightKg}
                             mode="decimal"
@@ -421,7 +421,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             onChange={(v) => updateProduct(p.id, { avgLiveWeightKg: v })}
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           {p.supplyType === 'purchased' ? (
                             <NumericCell
                               value={p.purchasePricePerLiveKg}
@@ -432,12 +432,12 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                               }
                             />
                           ) : (
-                            <div className="px-2 py-1 text-right font-num text-xs text-emerald-700">
+                            <div className="px-2 py-1 text-right font-num text-xs text-emerald-700 whitespace-nowrap">
                               {formatVnd(c?.effectiveLiveKgCost ?? 0)}
                             </div>
                           )}
                         </td>
-                        <td className="px-1 py-1.5 w-24">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={p.recoveryRate}
                             mode="percent"
@@ -447,7 +447,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             onChange={(v) => updateProduct(p.id, { recoveryRate: v })}
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-24">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={p.commercialWasteRate}
                             mode="percent"
@@ -459,21 +459,21 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-medium text-slate-800">
+                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-medium text-slate-800 whitespace-nowrap">
                           {formatNumber(
                             p.avgLiveWeightKg * p.recoveryRate,
                             2
                           )}{' '}
                           kg
                         </td>
-                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-semibold text-slate-900">
+                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-semibold text-slate-900 whitespace-nowrap">
                           {c?.cogsPerSellUnit !== null && c?.cogsPerSellUnit !== undefined ? (
                             formatVnd(c.cogsPerSellUnit)
                           ) : (
                             <span className="text-red-700">Cảnh báo = 0</span>
                           )}
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={p.targetSellPrice}
                             mode="currency"
@@ -481,13 +481,13 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             onChange={(v) => updateProduct(p.id, { targetSellPrice: v })}
                           />
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <StatusSelect
                             value={p.status}
                             onChange={(st) => updateProduct(p.id, { status: st })}
                           />
                         </td>
-                        <td className="px-3 py-1.5 text-right">
+                        <td className="px-2.5 py-1.5 text-right whitespace-nowrap">
                           <div className="inline-flex items-center gap-1">
                             <button
                               type="button"
@@ -758,30 +758,30 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1320px] border-collapse text-left text-xs">
+              <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                    <th className="px-3 py-2.5">Sản phẩm</th>
-                    <th className="px-2 py-2.5">Kênh bán</th>
-                    <th className="px-2 py-2.5 text-right">
+                    <th className="px-2.5 py-2.5 w-[150px] max-w-[150px]">Sản phẩm</th>
+                    <th className="px-1.5 py-2.5 w-[135px] max-w-[135px]">Kênh bán</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">
                       {selectedMonth === 0
-                        ? 'SL bình quân/tháng'
-                        : `Sản lượng T${selectedMonth}`}
+                        ? 'SL BQ/tháng'
+                        : `SL T${selectedMonth}`}
                     </th>
-                    <th className="px-2 py-2.5 text-right">Giá bán</th>
-                    <th className="px-2 py-2.5 text-right">Giảm giá (%)</th>
-                    <th className="px-2 py-2.5">Cơ chế CTV</th>
-                    <th className="px-2 py-2.5 text-right">Mức CTV</th>
-                    <th className="px-2 py-2.5 text-right">Giao hàng/đv</th>
-                    <th className="px-2 py-2.5 text-right bg-slate-100">
-                      Doanh thu thuần
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Giá bán</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Giảm (%)</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Cơ chế CTV</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Mức CTV</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Giao hàng/đv</th>
+                    <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">
+                      DT thuần
                     </th>
-                    <th className="px-2 py-2.5 text-right bg-slate-100">
-                      Lãi đóng góp
+                    <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">
+                      Lãi ĐG
                     </th>
-                    <th className="px-2 py-2.5 text-right bg-slate-100">Biên CM</th>
-                    <th className="px-2 py-2.5">Trạng thái</th>
-                    <th className="px-3 py-2.5 text-right">Thao tác</th>
+                    <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">Biên CM</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Trạng thái</th>
+                    <th className="px-2.5 py-2.5 text-right whitespace-nowrap">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -810,15 +810,19 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                         ? cp.monthlyVolumes.reduce((s, v) => s + v, 0) / 12
                         : cp.monthlyVolumes[selectedMonth - 1] || 0;
 
+                    const prodName =
+                      scenario.products.find((p) => p.id === cp.productId)?.name || '';
+
                     return (
                       <tr key={cp.id} className="hover:bg-slate-50/70">
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[150px] max-w-[150px]">
                           <select
                             value={cp.productId}
+                            title={prodName}
                             onChange={(e) =>
                               updateChannelPlan(cp.id, { productId: e.target.value })
                             }
-                            className="max-w-[180px] rounded border border-slate-200 bg-white px-2 py-1 text-xs text-slate-900"
+                            className="w-full max-w-[145px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs text-slate-900"
                           >
                             {scenario.products.map((p) => (
                               <option key={p.id} value={p.id}>
@@ -827,9 +831,10 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             ))}
                           </select>
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[135px] max-w-[135px]">
                           <select
                             value={cp.channelId}
+                            title={CHANNEL_LABELS[cp.channelId]}
                             onChange={(e) => {
                               const cid = e.target.value as ChannelId;
                               updateChannelPlan(cp.id, {
@@ -837,7 +842,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                                 isInternalTransfer: cid === 'internal_transfer',
                               });
                             }}
-                            className="max-w-[165px] rounded border border-slate-200 bg-white px-2 py-1 text-xs text-slate-900"
+                            className="w-full max-w-[130px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs text-slate-900"
                           >
                             {(Object.keys(CHANNEL_LABELS) as ChannelId[]).map((cid) => (
                               <option key={cid} value={cid}>
@@ -846,7 +851,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             ))}
                           </select>
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={displayVol}
                             mode="number"
@@ -865,7 +870,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             }}
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={cp.sellPrice}
                             mode="currency"
@@ -875,7 +880,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-20">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={cp.discountRate}
                             mode="percent"
@@ -887,7 +892,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <select
                             value={cp.commissionMethod}
                             onChange={(e) =>
@@ -904,7 +909,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             <option value="pct_cm_before_comm">% Lãi đóng góp</option>
                           </select>
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={cp.commissionValue}
                             mode={
@@ -919,7 +924,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-24">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={cp.deliveryCostPerUnit}
                             mode="currency"
@@ -929,14 +934,14 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-medium text-slate-900">
+                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-medium text-slate-900 whitespace-nowrap">
                           {cp.isInternalTransfer ? (
                             <span className="text-slate-400">Nội bộ (0 đ)</span>
                           ) : (
                             formatVnd(sumNetRev, true)
                           )}
                         </td>
-                        <td className="px-2 py-1.5 text-right font-num bg-slate-50">
+                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 whitespace-nowrap">
                           {cp.isInternalTransfer ? (
                             <span className="text-slate-400">0 đ</span>
                           ) : (
@@ -956,16 +961,16 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                             </div>
                           )}
                         </td>
-                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 text-slate-700">
+                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 text-slate-700 whitespace-nowrap">
                           {cp.isInternalTransfer ? '—' : formatPct(cmPct, 1)}
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <StatusSelect
                             value={cp.status}
                             onChange={(st) => updateChannelPlan(cp.id, { status: st })}
                           />
                         </td>
-                        <td className="px-3 py-1.5 text-right">
+                        <td className="px-2.5 py-1.5 text-right whitespace-nowrap">
                           <div className="inline-flex items-center gap-1">
                             <button
                               type="button"
@@ -1008,35 +1013,38 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
               <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">
-                    <th className="py-2 pr-3">Kênh bán</th>
-                    <th className="py-2 px-3 text-right">Tổng sản lượng</th>
-                    <th className="py-2 px-3 text-right">Doanh thu thuần</th>
-                    <th className="py-2 px-3 text-right">Giá vốn</th>
-                    <th className="py-2 px-3 text-right">CP bán hàng biến đổi</th>
-                    <th className="py-2 px-3 text-right">Lãi đóng góp</th>
-                    <th className="py-2 pl-3 text-right">Biên CM (%)</th>
+                    <th className="py-2 pr-3 max-w-[180px]">Kênh bán</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Tổng sản lượng</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Doanh thu thuần</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Giá vốn</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">CP bán hàng biến đổi</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Lãi đóng góp</th>
+                    <th className="py-2 pl-3 text-right whitespace-nowrap">Biên CM (%)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {result.channelSummaries.map((cs) => (
                     <tr key={cs.channelId}>
-                      <td className="py-2 pr-3 font-medium text-slate-900">
+                      <td
+                        className="py-2 pr-3 max-w-[180px] truncate font-medium text-slate-900"
+                        title={cs.channelName}
+                      >
                         {cs.channelName}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatNumber(Math.round(cs.volume))}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatVnd(cs.netRevenue)}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatVnd(cs.cogs)}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatVnd(cs.variableSellingCost)}
                       </td>
                       <td
-                        className={`py-2 px-3 text-right font-num font-semibold ${
+                        className={`py-2 px-3 text-right font-num font-semibold whitespace-nowrap ${
                           cs.contributionMargin >= 0
                             ? 'text-emerald-700'
                             : 'text-red-700'
@@ -1044,7 +1052,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                       >
                         {formatVnd(cs.contributionMargin)}
                       </td>
-                      <td className="py-2 pl-3 text-right font-num">
+                      <td className="py-2 pl-3 text-right font-num whitespace-nowrap">
                         {formatPct(cs.cmMarginPct)}
                       </td>
                     </tr>
@@ -1079,19 +1087,19 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1040px] border-collapse text-left text-xs">
+            <table className="w-full border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                  <th className="px-3 py-2.5">Vị trí / Chức danh</th>
-                  <th className="px-2 py-2.5">Bộ phận</th>
-                  <th className="px-2 py-2.5 text-right">Số người</th>
-                  <th className="px-2 py-2.5 text-right">Lương CB/người</th>
-                  <th className="px-2 py-2.5 text-right">Phụ cấp/người</th>
-                  <th className="px-2 py-2.5 text-right">BH & Nghĩa vụ DN</th>
-                  <th className="px-2 py-2.5 text-right">Thưởng định kỳ</th>
-                  <th className="px-2 py-2.5 text-right bg-slate-100">Tổng chi phí/tháng</th>
-                  <th className="px-2 py-2.5">Trạng thái</th>
-                  <th className="px-3 py-2.5 text-right">Xóa</th>
+                  <th className="px-3 py-2.5 w-[185px] max-w-[185px]">Vị trí / Chức danh</th>
+                  <th className="px-2 py-2.5 whitespace-nowrap">Bộ phận</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap">Số người</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap">Lương CB/người</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap">Phụ cấp/người</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap">BH & Nghĩa vụ DN</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap">Thưởng định kỳ</th>
+                  <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">Tổng CP/tháng</th>
+                  <th className="px-2 py-2.5 whitespace-nowrap">Trạng thái</th>
+                  <th className="px-3 py-2.5 text-right whitespace-nowrap">Xóa</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -1105,13 +1113,13 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                     st.periodicSalesBonus;
                   return (
                     <tr key={st.id} className="hover:bg-slate-50/70">
-                      <td className="px-2 py-1.5 min-w-[190px]">
+                      <td className="px-2 py-1.5 w-[185px] max-w-[185px]">
                         <TextCell
                           value={st.roleTitle}
                           onChange={(v) => updateStaff(st.id, { roleTitle: v })}
                         />
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-2 py-1.5 whitespace-nowrap">
                         <select
                           value={st.department}
                           onChange={(e) =>
@@ -1135,7 +1143,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                           ))}
                         </select>
                       </td>
-                      <td className="px-1 py-1.5 w-20">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={st.headcount}
                           mode="number"
@@ -1145,7 +1153,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-28">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={st.baseSalary}
                           mode="currency"
@@ -1153,7 +1161,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                           onChange={(v) => updateStaff(st.id, { baseSalary: v })}
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-24">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={st.allowance}
                           mode="currency"
@@ -1161,7 +1169,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                           onChange={(v) => updateStaff(st.id, { allowance: v })}
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-28">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={st.insuranceEmployer}
                           mode="currency"
@@ -1171,7 +1179,7 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-28">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={st.periodicSalesBonus}
                           mode="currency"
@@ -1181,16 +1189,16 @@ export const ProductsCogsView: React.FC<ProductsCogsViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-semibold text-slate-900">
+                      <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-semibold text-slate-900 whitespace-nowrap">
                         {formatVnd(monthlyTotal)}
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-2 py-1.5 whitespace-nowrap">
                         <StatusSelect
                           value={st.status}
                           onChange={(s) => updateStaff(st.id, { status: s })}
                         />
                       </td>
-                      <td className="px-3 py-1.5 text-right">
+                      <td className="px-3 py-1.5 text-right whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() =>

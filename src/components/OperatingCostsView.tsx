@@ -278,22 +278,22 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1300px] border-collapse text-left text-xs">
+              <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                    <th className="px-3 py-2.5">Mã</th>
-                    <th className="px-2 py-2.5">Nhóm chi phí</th>
-                    <th className="px-2 py-2.5 min-w-[190px]">Hạng mục</th>
-                    <th className="px-2 py-2.5">Phân loại P&L</th>
-                    <th className="px-2 py-2.5">Loại</th>
-                    <th className="px-2 py-2.5">Tần suất</th>
-                    <th className="px-2 py-2.5 text-center">BĐ – KT</th>
-                    <th className="px-2 py-2.5 text-right">SL</th>
-                    <th className="px-2 py-2.5 text-right">Đơn giá / Định mức</th>
-                    <th className="px-2 py-2.5 text-right bg-slate-100">Thành tiền kỳ</th>
-                    <th className="px-2 py-2.5 text-center">Tính vào P&L</th>
-                    <th className="px-2 py-2.5">Trạng thái</th>
-                    <th className="px-3 py-2.5 text-right">Thao tác</th>
+                    <th className="px-2.5 py-2.5 whitespace-nowrap">Mã</th>
+                    <th className="px-1.5 py-2.5 w-[135px] max-w-[135px]">Nhóm CP</th>
+                    <th className="px-1.5 py-2.5 w-[170px] max-w-[170px]">Hạng mục</th>
+                    <th className="px-1.5 py-2.5 w-[120px] max-w-[120px]">Phân loại P&L</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Loại</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Tần suất</th>
+                    <th className="px-1.5 py-2.5 text-center whitespace-nowrap">BĐ – KT</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">SL</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Đơn giá / ĐM</th>
+                    <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">Thành tiền kỳ</th>
+                    <th className="px-1.5 py-2.5 text-center whitespace-nowrap">P&L</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Trạng thái</th>
+                    <th className="px-2.5 py-2.5 text-right whitespace-nowrap">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -307,16 +307,17 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
 
                     return (
                       <tr key={c.id} className="hover:bg-slate-50/70">
-                        <td className="px-3 py-2 font-num text-[11px] text-slate-500">
+                        <td className="px-2.5 py-2 font-num text-[11px] text-slate-500 whitespace-nowrap">
                           {c.id}
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[135px] max-w-[135px]">
                           <select
                             value={c.group}
+                            title={c.group}
                             onChange={(e) =>
                               updateCost(c.id, { group: e.target.value as CostGroup })
                             }
-                            className="max-w-[155px] rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
+                            className="w-full max-w-[130px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
                           >
                             {COST_GROUPS.map((g) => (
                               <option key={g} value={g}>
@@ -325,21 +326,22 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             ))}
                           </select>
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[170px] max-w-[170px]">
                           <TextCell
                             value={c.name}
                             onChange={(v) => updateCost(c.id, { name: v })}
                           />
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[120px] max-w-[120px]">
                           <select
                             value={c.accountingClass}
+                            title={ACCOUNTING_LABELS[c.accountingClass]}
                             onChange={(e) =>
                               updateCost(c.id, {
                                 accountingClass: e.target.value as AccountingClass,
                               })
                             }
-                            className="rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
+                            className="w-full max-w-[115px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
                           >
                             {(Object.keys(ACCOUNTING_LABELS) as AccountingClass[]).map(
                               (ac) => (
@@ -350,7 +352,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             )}
                           </select>
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <select
                             value={c.costBehavior}
                             onChange={(e) =>
@@ -364,7 +366,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             <option value="variable">Biến đổi/SL</option>
                           </select>
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <select
                             value={c.frequency}
                             onChange={(e) =>
@@ -383,7 +385,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             )}
                           </select>
                         </td>
-                        <td className="px-2 py-1.5 text-center">
+                        <td className="px-1.5 py-1.5 text-center whitespace-nowrap">
                           <div className="inline-flex items-center gap-1 font-num">
                             <input
                               type="number"
@@ -418,7 +420,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             />
                           </div>
                         </td>
-                        <td className="px-1 py-1.5 w-16">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={c.quantity}
                             mode="number"
@@ -426,7 +428,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             onChange={(v) => updateCost(c.id, { quantity: v })}
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           {c.costBehavior === 'fixed' ? (
                             <NumericCell
                               value={c.unitPrice}
@@ -445,7 +447,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             />
                           )}
                         </td>
-                        <td className="px-2 py-1.5 text-right font-num bg-slate-50">
+                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 whitespace-nowrap">
                           <span
                             className={`font-semibold ${
                               isOverBudget ? 'text-amber-700' : 'text-slate-900'
@@ -454,7 +456,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             {formatVnd(lineTotal)}
                           </span>
                         </td>
-                        <td className="px-2 py-1.5 text-center">
+                        <td className="px-1.5 py-1.5 text-center whitespace-nowrap">
                           <input
                             type="checkbox"
                             checked={c.includeInPnl && !c.isMemoAllocationOnly}
@@ -468,13 +470,13 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             className="h-4 w-4 accent-emerald-700"
                           />
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <StatusSelect
                             value={c.status}
                             onChange={(s) => updateCost(c.id, { status: s })}
                           />
                         </td>
-                        <td className="px-3 py-1.5 text-right">
+                        <td className="px-2.5 py-1.5 text-right whitespace-nowrap">
                           <div className="inline-flex items-center gap-1">
                             <button
                               type="button"
@@ -533,23 +535,23 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1320px] border-collapse text-left text-xs">
+              <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                    <th className="px-3 py-2.5 min-w-[180px]">Chiến dịch</th>
-                    <th className="px-2 py-2.5">Trụ cột</th>
-                    <th className="px-2 py-2.5 text-center">Tháng</th>
-                    <th className="px-2 py-2.5 text-right">Quảng cáo</th>
-                    <th className="px-2 py-2.5 text-right">Nội dung/Video/TK</th>
-                    <th className="px-2 py-2.5 text-right">POSM/Dùng thử</th>
-                    <th className="px-2 py-2.5 text-right">KH tiềm năng</th>
-                    <th className="px-2 py-2.5 text-right">KH mới</th>
-                    <th className="px-2 py-2.5 text-right">Đơn hàng</th>
-                    <th className="px-2 py-2.5 text-right">DT quy thuộc</th>
-                    <th className="px-2 py-2.5 text-right">CM trước MKT</th>
-                    <th className="px-2 py-2.5 text-right bg-slate-100">Tổng CP/kỳ</th>
-                    <th className="px-2 py-2.5">Trạng thái</th>
-                    <th className="px-3 py-2.5 text-right">Xóa</th>
+                    <th className="px-2.5 py-2.5 w-[160px] max-w-[160px]">Chiến dịch</th>
+                    <th className="px-1.5 py-2.5 w-[135px] max-w-[135px]">Trụ cột</th>
+                    <th className="px-1.5 py-2.5 text-center whitespace-nowrap">Tháng</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Quảng cáo</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Nội dung/TK</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">POSM/Thử</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Lead</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">KH mới</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Đơn</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">DT quy thuộc</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">CM trước MKT</th>
+                    <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">Tổng CP/kỳ</th>
+                    <th className="px-1.5 py-2.5 whitespace-nowrap">Trạng thái</th>
+                    <th className="px-2.5 py-2.5 text-right whitespace-nowrap">Xóa</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -557,21 +559,22 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                     const mCost = getCampaignCost(mc);
                     return (
                       <tr key={mc.id} className="hover:bg-slate-50/70">
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[160px] max-w-[160px]">
                           <TextCell
                             value={mc.name}
                             onChange={(v) => updateCampaign(mc.id, { name: v })}
                           />
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 w-[135px] max-w-[135px]">
                           <select
                             value={mc.pillar}
+                            title={PILLAR_LABELS[mc.pillar]}
                             onChange={(e) =>
                               updateCampaign(mc.id, {
                                 pillar: e.target.value as MarketingPillar,
                               })
                             }
-                            className="max-w-[175px] rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
+                            className="w-full max-w-[130px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
                           >
                             {(Object.keys(PILLAR_LABELS) as MarketingPillar[]).map(
                               (pl) => (
@@ -582,7 +585,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             )}
                           </select>
                         </td>
-                        <td className="px-2 py-1.5 text-center">
+                        <td className="px-1.5 py-1.5 text-center whitespace-nowrap">
                           <select
                             value={mc.month}
                             onChange={(e) =>
@@ -598,7 +601,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             ))}
                           </select>
                         </td>
-                        <td className="px-1 py-1.5 w-24">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.adSpend}
                             mode="currency"
@@ -606,7 +609,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             onChange={(v) => updateCampaign(mc.id, { adSpend: v })}
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-24">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.contentCost + mc.videoCost + mc.designCost}
                             mode="currency"
@@ -620,7 +623,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-24">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.posmCost + mc.samplingCost + mc.posDevCost}
                             mode="currency"
@@ -634,7 +637,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-20">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.leads}
                             mode="number"
@@ -644,7 +647,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-20">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.newCustomers}
                             mode="number"
@@ -654,7 +657,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-20">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.orders}
                             mode="number"
@@ -664,7 +667,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.attributedRevenue}
                             mode="currency"
@@ -674,7 +677,7 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-1 py-1.5 w-28">
+                        <td className="px-1 py-1.5 whitespace-nowrap">
                           <NumericCell
                             value={mc.attributedCmBeforeMkt}
                             mode="currency"
@@ -684,16 +687,16 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
                             }
                           />
                         </td>
-                        <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-semibold text-slate-900">
+                        <td className="py-2 px-2.5 text-right font-num font-semibold text-slate-900 bg-slate-50 whitespace-nowrap">
                           {formatVnd(mCost)}
                         </td>
-                        <td className="px-2 py-1.5">
+                        <td className="px-1.5 py-1.5 whitespace-nowrap">
                           <StatusSelect
                             value={mc.status}
                             onChange={(s) => updateCampaign(mc.id, { status: s })}
                           />
                         </td>
-                        <td className="px-3 py-1.5 text-right">
+                        <td className="px-2.5 py-1.5 text-right whitespace-nowrap">
                           <button
                             type="button"
                             onClick={() =>
@@ -725,40 +728,48 @@ export const OperatingCostsView: React.FC<OperatingCostsViewProps> = ({
               <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">
-                    <th className="py-2 pr-3">Chiến dịch</th>
-                    <th className="py-2 px-3">Trụ cột</th>
-                    <th className="py-2 px-3 text-right">Chi phí năm</th>
-                    <th className="py-2 px-3 text-right">CP/Đơn (F36)</th>
-                    <th className="py-2 px-3 text-right">CAC (F37)</th>
-                    <th className="py-2 px-3 text-right">Chuyển đổi (F38)</th>
-                    <th className="py-2 px-3 text-right">ROAS (F39)</th>
-                    <th className="py-2 pl-3 text-right">Hiệu quả đóng góp (F40)</th>
+                    <th className="py-2 pr-3 max-w-[190px]">Chiến dịch</th>
+                    <th className="py-2 px-3 max-w-[160px]">Trụ cột</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Chi phí năm</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">CP/Đơn (F36)</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">CAC (F37)</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Chuyển đổi (F38)</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">ROAS (F39)</th>
+                    <th className="py-2 pl-3 text-right whitespace-nowrap">Hiệu quả đóng góp (F40)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {result.marketingSummaries.map((ms) => (
                     <tr key={ms.campaignId}>
-                      <td className="py-2 pr-3 font-medium text-slate-900">{ms.name}</td>
-                      <td className="py-2 px-3 text-slate-600">
+                      <td
+                        className="py-2 pr-3 max-w-[190px] truncate font-medium text-slate-900"
+                        title={ms.name}
+                      >
+                        {ms.name}
+                      </td>
+                      <td
+                        className="py-2 px-3 max-w-[160px] truncate text-slate-600"
+                        title={PILLAR_LABELS[ms.pillar]}
+                      >
                         {PILLAR_LABELS[ms.pillar]}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatVnd(ms.totalCost, true)}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {ms.costPerOrder !== null ? formatVnd(ms.costPerOrder) : 'Không xác định'}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {ms.cac !== null ? formatVnd(ms.cac) : 'Không xác định'}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatPct(ms.conversionRatePct)}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {ms.roas !== null ? `${formatNumber(ms.roas, 2)}x` : '—'}
                       </td>
                       <td
-                        className={`py-2 pl-3 text-right font-num font-semibold ${
+                        className={`py-2 pl-3 text-right font-num font-semibold whitespace-nowrap ${
                           ms.contributionEffect >= 0
                             ? 'text-emerald-700'
                             : 'text-red-700'

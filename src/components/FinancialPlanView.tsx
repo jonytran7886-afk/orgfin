@@ -229,18 +229,18 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1100px] border-collapse text-left text-xs">
+            <table className="w-full min-w-[1160px] border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                  <th className="sticky left-0 z-10 bg-slate-50 px-4 py-2.5 min-w-[270px]">
+                  <th className="sticky left-0 z-10 bg-slate-50 px-3 py-2.5 w-[225px] min-w-[200px] max-w-[240px]">
                     Chỉ tiêu P&L (Đơn vị: VNĐ)
                   </th>
                   {pnlColumns.map((col) => (
-                    <th key={col.label} className="px-2.5 py-2.5 text-right">
+                    <th key={col.label} className="px-2 py-2.5 text-right whitespace-nowrap">
                       {col.label}
                     </th>
                   ))}
-                  <th className="bg-slate-100 px-3 py-2.5 text-right font-bold text-slate-900">
+                  <th className="bg-slate-100 px-3 py-2.5 text-right font-bold text-slate-900 whitespace-nowrap">
                     Cả năm
                   </th>
                 </tr>
@@ -252,7 +252,8 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                     className={row.highlight ? 'bg-slate-50/90' : 'hover:bg-slate-50/50'}
                   >
                     <td
-                      className={`sticky left-0 z-10 px-4 py-2 ${
+                      title={row.label}
+                      className={`sticky left-0 z-10 px-3 py-2 max-w-[240px] truncate ${
                         row.highlight ? 'bg-slate-50' : 'bg-white'
                       } ${row.bold ? 'font-semibold text-slate-900' : 'text-slate-700'}`}
                     >
@@ -264,7 +265,7 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                       return (
                         <td
                           key={col.label}
-                          className={`px-2.5 py-2 text-right font-num ${
+                          className={`px-2 py-2 text-right font-num whitespace-nowrap ${
                             row.bold ? 'font-semibold' : ''
                           } ${isNeg ? 'text-red-700' : 'text-slate-900'}`}
                         >
@@ -275,7 +276,7 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                       );
                     })}
                     <td
-                      className={`bg-slate-100/80 px-3 py-2 text-right font-num font-semibold ${
+                      className={`bg-slate-100/80 px-3 py-2 text-right font-num font-semibold whitespace-nowrap ${
                         ((result.annualPnl[row.key] as number | null) ?? 0) < 0
                           ? 'text-red-700'
                           : 'text-slate-900'
@@ -348,14 +349,14 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
           </div>
 
           <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto">
-            <table className="w-full min-w-[1180px] border-collapse text-left text-xs">
+            <table className="w-full min-w-[1160px] border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                  <th className="sticky left-0 z-10 bg-slate-50 px-4 py-2.5 min-w-[250px]">
-                    Chỉ tiêu Dòng tiền (Công thức 51–56)
+                  <th className="sticky left-0 z-10 bg-slate-50 px-3 py-2.5 w-[220px] min-w-[200px] max-w-[235px]">
+                    Chỉ tiêu Dòng tiền (F51–56)
                   </th>
                   {result.monthlyCashFlow.map((cf) => (
-                    <th key={cf.month} className="px-2.5 py-2.5 text-right">
+                    <th key={cf.month} className="px-2 py-2.5 text-right whitespace-nowrap">
                       T{cf.month}
                     </th>
                   ))}
@@ -387,7 +388,8 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                     className={row.highlight ? 'bg-slate-50/90' : 'hover:bg-slate-50/50'}
                   >
                     <td
-                      className={`sticky left-0 z-10 px-4 py-2 ${
+                      title={row.label}
+                      className={`sticky left-0 z-10 px-3 py-2 max-w-[235px] truncate ${
                         row.highlight ? 'bg-slate-50' : 'bg-white'
                       } ${row.bold ? 'font-semibold text-slate-900' : 'text-slate-700'}`}
                     >
@@ -401,7 +403,7 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                       return (
                         <td
                           key={cf.month}
-                          className={`px-2.5 py-2 text-right font-num ${
+                          className={`px-2 py-2 text-right font-num whitespace-nowrap ${
                             row.bold ? 'font-semibold' : ''
                           } ${
                             isCriticalNeg
@@ -603,10 +605,10 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                 <table className="w-full border-collapse text-left text-xs">
                   <thead>
                     <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">
-                      <th className="py-2 pr-3">Chỉ tiêu cả năm</th>
-                      <th className="py-2 px-3 text-right">Kế hoạch gốc</th>
-                      <th className="py-2 px-3 text-right">Sau mô phỏng</th>
-                      <th className="py-2 pl-3 text-right">Chênh lệch</th>
+                      <th className="py-2 pr-3 max-w-[230px]">Chỉ tiêu cả năm</th>
+                      <th className="py-2 px-3 text-right whitespace-nowrap">Kế hoạch gốc</th>
+                      <th className="py-2 px-3 text-right whitespace-nowrap">Sau mô phỏng</th>
+                      <th className="py-2 pl-3 text-right whitespace-nowrap">Chênh lệch</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -664,18 +666,21 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                           ? `${formatNumber(Math.round(v))} đv`
                           : formatVnd(v, true);
                       return (
-                        <tr key={row.label}>
-                          <td className="py-2.5 pr-3 font-medium text-slate-900">
+                      <tr key={row.label}>
+                          <td
+                            title={row.label}
+                            className="py-2.5 pr-3 max-w-[230px] truncate font-medium text-slate-900"
+                          >
                             {row.label}
                           </td>
-                          <td className="py-2.5 px-3 text-right font-num text-slate-600">
+                          <td className="py-2.5 px-3 text-right font-num text-slate-600 whitespace-nowrap">
                             {fmt(row.base)}
                           </td>
-                          <td className="py-2.5 px-3 text-right font-num font-semibold text-slate-900">
+                          <td className="py-2.5 px-3 text-right font-num font-semibold text-slate-900 whitespace-nowrap">
                             {fmt(row.sim)}
                           </td>
                           <td
-                            className={`py-2.5 pl-3 text-right font-num font-semibold ${
+                            className={`py-2.5 pl-3 text-right font-num font-semibold whitespace-nowrap ${
                               diff > 0
                                 ? 'text-emerald-700'
                                 : diff < 0
@@ -747,10 +752,10 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
             <table className="w-full border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                  <th className="px-4 py-3">Chỉ tiêu tài chính cả năm (Tự tính từ dữ liệu đầu vào)</th>
-                  <th className="px-4 py-3 text-right">Thận trọng</th>
-                  <th className="px-4 py-3 text-right">Cơ sở</th>
-                  <th className="px-4 py-3 text-right">Tăng trưởng</th>
+                  <th className="px-4 py-3 max-w-[250px]">Chỉ tiêu tài chính cả năm</th>
+                  <th className="px-4 py-3 text-right whitespace-nowrap">Thận trọng</th>
+                  <th className="px-4 py-3 text-right whitespace-nowrap">Cơ sở</th>
+                  <th className="px-4 py-3 text-right whitespace-nowrap">Tăng trưởng</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -836,7 +841,8 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                 ].map((row) => (
                   <tr key={row.label} className={row.bold ? 'bg-slate-50/70' : ''}>
                     <td
-                      className={`px-4 py-2.5 ${
+                      title={row.label}
+                      className={`px-4 py-2.5 max-w-[250px] truncate ${
                         row.bold ? 'font-semibold text-slate-900' : 'text-slate-700'
                       }`}
                     >
@@ -845,7 +851,7 @@ export const FinancialPlanView: React.FC<FinancialPlanViewProps> = ({
                     {row.vals.map((v, idx) => (
                       <td
                         key={idx}
-                        className={`px-4 py-2.5 text-right font-num ${
+                        className={`px-4 py-2.5 text-right font-num whitespace-nowrap ${
                           row.bold ? 'font-semibold' : ''
                         } ${v < 0 ? 'text-red-700' : 'text-slate-900'}`}
                       >

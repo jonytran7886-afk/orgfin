@@ -242,24 +242,24 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1320px] border-collapse text-left text-xs">
+            <table className="w-full border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                  <th className="px-3 py-2.5">Mã</th>
-                  <th className="px-2 py-2.5 min-w-[180px]">Tên hạng mục</th>
-                  <th className="px-2 py-2.5">Nhóm tài sản</th>
-                  <th className="px-2 py-2.5">Địa điểm</th>
-                  <th className="px-2 py-2.5 text-right">SL</th>
-                  <th className="px-2 py-2.5 text-right">Đơn giá</th>
-                  <th className="px-2 py-2.5 text-right bg-slate-100">Tổng vốn ĐT</th>
-                  <th className="px-2 py-2.5 text-center">Tháng TT</th>
-                  <th className="px-2 py-2.5 text-center">Tháng SD</th>
-                  <th className="px-2 py-2.5 text-center">KH?</th>
-                  <th className="px-2 py-2.5 text-right">Số tháng KH</th>
-                  <th className="px-2 py-2.5 text-right bg-slate-100">Khấu hao/tháng</th>
-                  <th className="px-2 py-2.5">Triển khai</th>
-                  <th className="px-2 py-2.5">Trạng thái</th>
-                  <th className="px-3 py-2.5 text-right">Thao tác</th>
+                  <th className="px-2.5 py-2.5 whitespace-nowrap">Mã</th>
+                  <th className="px-2 py-2.5 w-[175px] max-w-[175px]">Tên hạng mục</th>
+                  <th className="px-2 py-2.5 w-[130px] max-w-[130px]">Nhóm TS</th>
+                  <th className="px-2 py-2.5 w-[135px] max-w-[135px]">Địa điểm</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap">SL</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap">Đơn giá</th>
+                  <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">Tổng vốn ĐT</th>
+                  <th className="px-2 py-2.5 text-center whitespace-nowrap" title="Tháng thanh toán">Th.TT</th>
+                  <th className="px-2 py-2.5 text-center whitespace-nowrap" title="Tháng đưa vào sử dụng">Th.SD</th>
+                  <th className="px-2 py-2.5 text-center whitespace-nowrap" title="Đủ điều kiện khấu hao">KH?</th>
+                  <th className="px-2 py-2.5 text-right whitespace-nowrap" title="Số tháng khấu hao">Tháng KH</th>
+                  <th className="px-2 py-2.5 text-right bg-slate-100 whitespace-nowrap">KH/tháng</th>
+                  <th className="px-2 py-2.5 whitespace-nowrap">Triển khai</th>
+                  <th className="px-2 py-2.5 whitespace-nowrap">Trạng thái</th>
+                  <th className="px-2.5 py-2.5 text-right whitespace-nowrap">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -269,26 +269,29 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                     a.isDepreciable && a.depreciableMonths > 0
                       ? Math.max(0, total - a.salvageValue) / a.depreciableMonths
                       : 0;
+                  const locName =
+                    scenario.locations.find((l) => l.id === a.locationId)?.name || '';
                   return (
                     <tr key={a.id} className="hover:bg-slate-50/70">
-                      <td className="px-3 py-2 font-num text-[11px] text-slate-500">
+                      <td className="px-2.5 py-2 font-num text-[11px] text-slate-500 whitespace-nowrap">
                         {a.id}
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 w-[175px] max-w-[175px]">
                         <TextCell
                           value={a.name}
                           onChange={(v) => updateAsset(a.id, { name: v })}
                         />
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 w-[130px] max-w-[130px]">
                         <select
                           value={a.category}
+                          title={a.category}
                           onChange={(e) =>
                             updateAsset(a.id, {
                               category: e.target.value as AssetCategory,
                             })
                           }
-                          className="max-w-[165px] rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
+                          className="w-full max-w-[125px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
                         >
                           {ASSET_CATEGORIES.map((cat) => (
                             <option key={cat} value={cat}>
@@ -297,13 +300,14 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           ))}
                         </select>
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 w-[135px] max-w-[135px]">
                         <select
                           value={a.locationId}
+                          title={locName}
                           onChange={(e) =>
                             updateAsset(a.id, { locationId: e.target.value })
                           }
-                          className="max-w-[140px] rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
+                          className="w-full max-w-[130px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
                         >
                           {scenario.locations.map((l) => (
                             <option key={l.id} value={l.id}>
@@ -312,7 +316,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           ))}
                         </select>
                       </td>
-                      <td className="px-1 py-1.5 w-14">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={a.quantity}
                           mode="number"
@@ -320,7 +324,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           onChange={(v) => updateAsset(a.id, { quantity: Math.round(v) })}
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-28">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={a.unitPrice}
                           mode="currency"
@@ -328,10 +332,10 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           onChange={(v) => updateAsset(a.id, { unitPrice: v })}
                         />
                       </td>
-                      <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-semibold text-slate-900">
+                      <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-semibold text-slate-900 whitespace-nowrap">
                         {formatVnd(total, true)}
                       </td>
-                      <td className="px-2 py-1.5 text-center">
+                      <td className="px-1.5 py-1.5 text-center whitespace-nowrap">
                         <input
                           type="number"
                           min={1}
@@ -348,7 +352,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           className="w-11 rounded border border-slate-200 px-1 py-0.5 text-center font-num text-xs"
                         />
                       </td>
-                      <td className="px-2 py-1.5 text-center">
+                      <td className="px-1.5 py-1.5 text-center whitespace-nowrap">
                         <input
                           type="number"
                           min={1}
@@ -365,7 +369,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           className="w-11 rounded border border-slate-200 px-1 py-0.5 text-center font-num text-xs"
                         />
                       </td>
-                      <td className="px-2 py-1.5 text-center">
+                      <td className="px-1.5 py-1.5 text-center whitespace-nowrap">
                         <input
                           type="checkbox"
                           checked={a.isDepreciable}
@@ -376,7 +380,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           className="h-4 w-4 accent-emerald-700"
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-20">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={a.depreciableMonths}
                           mode="number"
@@ -386,10 +390,10 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-medium text-emerald-700">
+                      <td className="px-2 py-1.5 text-right font-num bg-slate-50 font-medium text-emerald-700 whitespace-nowrap">
                         {formatVnd(monthlyDepr)}
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 whitespace-nowrap">
                         <select
                           value={a.deploymentStatus}
                           onChange={(e) =>
@@ -397,20 +401,20 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                               deploymentStatus: e.target.value as DeploymentStatus,
                             })
                           }
-                          className="rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
+                          className="rounded border border-slate-200 bg-white px-1.5 py-1 text-xs whitespace-nowrap"
                         >
                           <option value="planned">Dự kiến</option>
                           <option value="purchasing">Đang mua</option>
                           <option value="in_service">Đang dùng</option>
                         </select>
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 whitespace-nowrap">
                         <StatusSelect
                           value={a.status}
                           onChange={(s) => updateAsset(a.id, { status: s })}
                         />
                       </td>
-                      <td className="px-3 py-1.5 text-right">
+                      <td className="px-2.5 py-1.5 text-right whitespace-nowrap">
                         <div className="inline-flex items-center gap-1">
                           <button
                             type="button"
@@ -463,26 +467,26 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1220px] border-collapse text-left text-xs">
+              <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-600">
-                    <th className="px-3 py-2.5">Hoạt động</th>
-                    <th className="px-2 py-2.5 min-w-[190px]">Tên địa điểm</th>
-                    <th className="px-2 py-2.5">Loại</th>
-                    <th className="px-2 py-2.5 text-center">Mở từ</th>
-                    <th className="px-2 py-2.5 text-right">Thuê MB/tháng</th>
-                    <th className="px-2 py-2.5 text-right">Lương ĐB/tháng</th>
-                    <th className="px-2 py-2.5 text-right">Điện nước + Net + BT</th>
-                    <th className="px-2 py-2.5 text-right">Tỷ trọng DT CH (%)</th>
-                    <th className="px-2 py-2.5 text-right">Phân bổ CP chung (%)</th>
-                    <th className="px-2 py-2.5">Trạng thái</th>
-                    <th className="px-3 py-2.5 text-right">Xóa</th>
+                    <th className="px-2.5 py-2.5 text-center whitespace-nowrap">HĐ?</th>
+                    <th className="px-2 py-2.5 w-[180px] max-w-[180px]">Tên địa điểm</th>
+                    <th className="px-2 py-2.5 w-[135px] max-w-[135px]">Loại</th>
+                    <th className="px-2 py-2.5 text-center whitespace-nowrap">Mở từ</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Thuê MB/tháng</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Lương ĐB/tháng</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap">Điện nước + BT</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap" title="Tỷ trọng doanh thu cửa hàng (%)">Tỷ trọng DT (%)</th>
+                    <th className="px-2 py-2.5 text-right whitespace-nowrap" title="Phân bổ chi phí chung (%)">CP chung (%)</th>
+                    <th className="px-2 py-2.5 whitespace-nowrap">Trạng thái</th>
+                    <th className="px-2.5 py-2.5 text-right whitespace-nowrap">Xóa</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {scenario.locations.map((loc) => (
                     <tr key={loc.id} className="hover:bg-slate-50/70">
-                      <td className="px-3 py-2 text-center">
+                      <td className="px-2.5 py-2 text-center whitespace-nowrap">
                         <input
                           type="checkbox"
                           checked={loc.isActive}
@@ -492,21 +496,22 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           className="h-4 w-4 accent-emerald-700"
                         />
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 w-[180px] max-w-[180px]">
                         <TextCell
                           value={loc.name}
                           onChange={(v) => updateLocation(loc.id, { name: v })}
                         />
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 w-[135px] max-w-[135px]">
                         <select
                           value={loc.type}
+                          title={LOCATION_TYPE_LABELS[loc.type]}
                           onChange={(e) =>
                             updateLocation(loc.id, {
                               type: e.target.value as LocationType,
                             })
                           }
-                          className="rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
+                          className="w-full max-w-[130px] truncate rounded border border-slate-200 bg-white px-1.5 py-1 text-xs"
                         >
                           {(Object.keys(LOCATION_TYPE_LABELS) as LocationType[]).map(
                             (lt) => (
@@ -517,7 +522,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           )}
                         </select>
                       </td>
-                      <td className="px-2 py-1.5 text-center">
+                      <td className="px-1.5 py-1.5 text-center whitespace-nowrap">
                         <input
                           type="number"
                           min={1}
@@ -534,7 +539,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           className="w-11 rounded border border-slate-200 px-1 py-0.5 text-center font-num text-xs"
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-28">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={loc.monthlyRent}
                           mode="currency"
@@ -542,7 +547,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           onChange={(v) => updateLocation(loc.id, { monthlyRent: v })}
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-28">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={loc.monthlyFixedPayroll}
                           mode="currency"
@@ -552,7 +557,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-28">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={
                             loc.monthlyUtilities +
@@ -572,7 +577,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-20">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={loc.storeRevenueSharePct}
                           mode="number"
@@ -584,7 +589,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-1 py-1.5 w-20">
+                      <td className="px-1 py-1.5 whitespace-nowrap">
                         <NumericCell
                           value={loc.allocatedSharedCostPct}
                           mode="number"
@@ -596,13 +601,13 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                           }
                         />
                       </td>
-                      <td className="px-2 py-1.5">
+                      <td className="px-1.5 py-1.5 whitespace-nowrap">
                         <StatusSelect
                           value={loc.status}
                           onChange={(s) => updateLocation(loc.id, { status: s })}
                         />
                       </td>
-                      <td className="px-3 py-1.5 text-right">
+                      <td className="px-2.5 py-1.5 text-right whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() =>
@@ -636,31 +641,36 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
               <table className="w-full border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">
-                    <th className="py-2 pr-3">Địa điểm</th>
-                    <th className="py-2 px-3 text-right">Lãi đóng góp (CM)</th>
-                    <th className="py-2 px-3 text-right">CP cố định trực tiếp</th>
-                    <th className="py-2 px-3 text-right">Khấu hao tài sản</th>
-                    <th className="py-2 px-3 text-right">LN trước phân bổ</th>
-                    <th className="py-2 px-3 text-right">CP chung phân bổ</th>
-                    <th className="py-2 px-3 text-right">LN sau phân bổ</th>
-                    <th className="py-2 pl-3 text-right">Hòa vốn/tháng</th>
+                    <th className="py-2 pr-3 max-w-[200px]">Địa điểm</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Lãi đóng góp (CM)</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">CP cố định trực tiếp</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">Khấu hao tài sản</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">LN trước phân bổ</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">CP chung phân bổ</th>
+                    <th className="py-2 px-3 text-right whitespace-nowrap">LN sau phân bổ</th>
+                    <th className="py-2 pl-3 text-right whitespace-nowrap">Hòa vốn/tháng</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {result.storeSummaries.map((st) => (
                     <tr key={st.locationId}>
-                      <td className="py-2 pr-3 font-medium text-slate-900">{st.name}</td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td
+                        className="py-2 pr-3 max-w-[200px] truncate font-medium text-slate-900"
+                        title={st.name}
+                      >
+                        {st.name}
+                      </td>
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatVnd(st.annualContributionMargin, true)}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatVnd(st.annualDirectFixedCost, true)}
                       </td>
-                      <td className="py-2 px-3 text-right font-num">
+                      <td className="py-2 px-3 text-right font-num whitespace-nowrap">
                         {formatVnd(st.annualAssetDepreciation, true)}
                       </td>
                       <td
-                        className={`py-2 px-3 text-right font-num font-semibold ${
+                        className={`py-2 px-3 text-right font-num font-semibold whitespace-nowrap ${
                           st.annualProfitBeforeAlloc >= 0
                             ? 'text-emerald-700'
                             : 'text-red-700'
@@ -668,11 +678,11 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                       >
                         {formatVnd(st.annualProfitBeforeAlloc, true)}
                       </td>
-                      <td className="py-2 px-3 text-right font-num text-slate-600">
+                      <td className="py-2 px-3 text-right font-num text-slate-600 whitespace-nowrap">
                         {formatVnd(st.annualAllocatedSharedCost, true)}
                       </td>
                       <td
-                        className={`py-2 px-3 text-right font-num font-semibold ${
+                        className={`py-2 px-3 text-right font-num font-semibold whitespace-nowrap ${
                           st.annualProfitAfterAlloc >= 0
                             ? 'text-emerald-700'
                             : 'text-red-700'
@@ -680,7 +690,7 @@ export const InvestmentsStoresView: React.FC<InvestmentsStoresViewProps> = ({
                       >
                         {formatVnd(st.annualProfitAfterAlloc, true)}
                       </td>
-                      <td className="py-2 pl-3 text-right font-num">
+                      <td className="py-2 pl-3 text-right font-num whitespace-nowrap">
                         {st.breakEvenUnitsMonthly !== null
                           ? `${formatNumber(Math.round(st.breakEvenUnitsMonthly))} đv`
                           : '—'}

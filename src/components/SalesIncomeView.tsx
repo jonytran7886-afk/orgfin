@@ -1549,18 +1549,18 @@ export const SalesIncomeView: React.FC<SalesIncomeViewProps> = ({
           <table className="w-full border-collapse text-left text-xs">
             <thead>
               <tr className="border-b border-slate-200 text-[11px] font-semibold text-slate-500">
-                <th className="py-2 pr-3">Cá nhân / Kịch bản</th>
-                <th className="py-2 px-3">Vai trò</th>
-                <th className="py-2 px-3">Khu vực</th>
-                <th className="py-2 px-3 text-right">Sản lượng/tháng</th>
-                <th className="py-2 px-3 text-right">Doanh thu tạo ra</th>
-                <th className="py-2 px-3 text-right">Hoa hồng & thưởng</th>
-                <th className="py-2 px-3 text-right">Lương CĐ</th>
-                <th className="py-2 px-3 text-right">Tổng thu nhập</th>
+                <th className="py-2 pr-3 max-w-[190px]">Cá nhân / Kịch bản</th>
+                <th className="py-2 px-3 whitespace-nowrap">Vai trò</th>
+                <th className="py-2 px-3 max-w-[125px]">Khu vực</th>
+                <th className="py-2 px-3 text-right whitespace-nowrap">Sản lượng/tháng</th>
+                <th className="py-2 px-3 text-right whitespace-nowrap">Doanh thu tạo ra</th>
+                <th className="py-2 px-3 text-right whitespace-nowrap">Hoa hồng & thưởng</th>
+                <th className="py-2 px-3 text-right whitespace-nowrap">Lương CĐ</th>
+                <th className="py-2 px-3 text-right whitespace-nowrap">Tổng thu nhập</th>
                 {isExecutive && (
-                  <th className="py-2 px-3 text-right">Lãi đóng góp Organic</th>
+                  <th className="py-2 px-3 text-right whitespace-nowrap">Lãi đóng góp Organic</th>
                 )}
-                <th className="py-2 pl-3 text-right">Kế hoạch</th>
+                <th className="py-2 pl-3 text-right whitespace-nowrap">Kế hoạch</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -1574,31 +1574,39 @@ export const SalesIncomeView: React.FC<SalesIncomeViewProps> = ({
                       isSelected ? 'bg-emerald-50/50' : 'hover:bg-slate-50'
                     }`}
                   >
-                    <td className="py-2.5 pr-3 font-medium text-slate-900">
+                    <td
+                      title={profile.name}
+                      className="py-2.5 pr-3 max-w-[190px] truncate font-medium text-slate-900"
+                    >
                       {profile.name}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600">
+                    <td className="py-2.5 px-3 text-slate-600 whitespace-nowrap">
                       {profile.sellerType === 'ctv' ? 'CTV' : 'Nhân viên'}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600">{profile.region}</td>
-                    <td className="py-2.5 px-3 text-right font-num">
+                    <td
+                      title={profile.region}
+                      className="py-2.5 px-3 max-w-[125px] truncate text-slate-600"
+                    >
+                      {profile.region}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-num whitespace-nowrap">
                       {formatNumber(computed.totalMonthlyQty)} đv
                     </td>
-                    <td className="py-2.5 px-3 text-right font-num">
+                    <td className="py-2.5 px-3 text-right font-num whitespace-nowrap">
                       {formatVnd(computed.totalGrossRevenue)}
                     </td>
-                    <td className="py-2.5 px-3 text-right font-num text-emerald-700">
+                    <td className="py-2.5 px-3 text-right font-num text-emerald-700 whitespace-nowrap">
                       {formatVnd(computed.totalCommission + computed.totalAllBonuses)}
                     </td>
-                    <td className="py-2.5 px-3 text-right font-num">
+                    <td className="py-2.5 px-3 text-right font-num whitespace-nowrap">
                       {formatVnd(computed.fixedSalaryAndAllowance)}
                     </td>
-                    <td className="py-2.5 px-3 text-right font-num font-semibold text-slate-900">
+                    <td className="py-2.5 px-3 text-right font-num font-semibold text-slate-900 whitespace-nowrap">
                       {formatVnd(computed.grossIncome)}
                     </td>
                     {isExecutive && (
                       <td
-                        className={`py-2.5 px-3 text-right font-num font-semibold ${
+                        className={`py-2.5 px-3 text-right font-num font-semibold whitespace-nowrap ${
                           computed.organicContribution >= 0
                             ? 'text-emerald-700'
                             : 'text-red-700'
@@ -1607,7 +1615,7 @@ export const SalesIncomeView: React.FC<SalesIncomeViewProps> = ({
                         {formatVnd(computed.organicContribution)}
                       </td>
                     )}
-                    <td className="py-2.5 pl-3 text-right text-xs">
+                    <td className="py-2.5 pl-3 text-right text-xs whitespace-nowrap">
                       {profile.appliedToPlan ? (
                         <span className="inline-flex items-center gap-1 font-medium text-emerald-700">
                           <CheckCircle2 className="h-3.5 w-3.5" />

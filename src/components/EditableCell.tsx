@@ -90,7 +90,7 @@ export const NumericCell: React.FC<NumericCellProps> = ({
             setEditing(false);
           }
         }}
-        className={`w-full rounded border border-emerald-600 bg-white px-2 py-1 text-right font-num text-xs text-slate-900 outline-none ring-2 ring-emerald-600/20 ${className}`}
+        className={`w-full min-w-[64px] whitespace-nowrap rounded border border-emerald-600 bg-white px-2 py-1 text-right font-num text-xs text-slate-900 outline-none ring-2 ring-emerald-600/20 ${className}`}
       />
     );
   }
@@ -108,8 +108,8 @@ export const NumericCell: React.FC<NumericCellProps> = ({
         setEditing(true);
       }}
       aria-label={ariaLabel}
-      title="Nhấp để chỉnh sửa trực tiếp"
-      className={`w-full cursor-text rounded border border-transparent px-2 py-1 text-right font-num text-xs text-slate-900 transition-colors hover:border-slate-300 hover:bg-emerald-50/40 focus-visible:border-emerald-600 focus-visible:outline-none ${className}`}
+      title={`${formattedText} (Nhấp để chỉnh sửa)`}
+      className={`w-full whitespace-nowrap cursor-text rounded border border-transparent px-2 py-1 text-right font-num text-xs text-slate-900 transition-colors hover:border-slate-300 hover:bg-emerald-50/40 focus-visible:border-emerald-600 focus-visible:outline-none ${className}`}
     >
       {formattedText}
     </button>
@@ -168,8 +168,8 @@ export const TextCell: React.FC<TextCellProps> = ({
         setDraft(value);
         setEditing(true);
       }}
-      title="Nhấp để sửa nội dung"
-      className={`w-full cursor-text truncate rounded border border-transparent px-2 py-1 text-left text-xs text-slate-900 transition-colors hover:border-slate-300 hover:bg-emerald-50/40 focus-visible:border-emerald-600 focus-visible:outline-none ${className}`}
+      title={value ? `${value} (Nhấp để sửa)` : placeholder || 'Nhấp để sửa nội dung'}
+      className={`block w-full cursor-text truncate rounded border border-transparent px-2 py-1 text-left text-xs text-slate-900 transition-colors hover:border-slate-300 hover:bg-emerald-50/40 focus-visible:border-emerald-600 focus-visible:outline-none ${className}`}
     >
       {value || <span className="text-slate-400">{placeholder || '—'}</span>}
     </button>
@@ -192,13 +192,16 @@ export const StatusSelect: React.FC<StatusSelectProps> = ({ value, onChange }) =
       : FileQuestion;
 
   return (
-    <div className={`inline-flex items-center gap-1.5 text-xs font-medium ${getStatusColorClass(value)}`}>
+    <div
+      title={STATUS_LABELS[value]}
+      className={`inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium ${getStatusColorClass(value)}`}
+    >
       <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as DataStatus)}
         aria-label="Trạng thái dữ liệu"
-        className="cursor-pointer bg-transparent py-0.5 pr-1 text-xs font-medium outline-none hover:underline focus-visible:ring-1 focus-visible:ring-emerald-600"
+        className="cursor-pointer bg-transparent py-0.5 pr-1 text-xs font-medium whitespace-nowrap outline-none hover:underline focus-visible:ring-1 focus-visible:ring-emerald-600"
       >
         {(Object.keys(STATUS_LABELS) as DataStatus[]).map((st) => (
           <option key={st} value={st} className="text-slate-900">

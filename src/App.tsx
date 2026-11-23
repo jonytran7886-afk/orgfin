@@ -8,6 +8,8 @@ import {
   LayoutDashboard,
   Menu,
   Package,
+  PanelLeftClose,
+  PanelLeftOpen,
   Receipt,
   Undo2,
   X,
@@ -88,6 +90,7 @@ export default function App() {
   const [undoStack, setUndoStack] = useState<PlannerState[]>([]);
   const [activeNav, setActiveNav] = useState<NavSection>('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Auto-save to localStorage on every state update
   useEffect(() => {
@@ -202,9 +205,9 @@ export default function App() {
   const activeNavMeta = NAV_ITEMS.find((n) => n.id === activeNav) || NAV_ITEMS[0];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-50 text-slate-900">
       {/* Top Bar (3-zone contract) */}
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-8 border-b border-slate-200 bg-white px-4 lg:px-6">
+      <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 lg:gap-6 lg:px-6">
         <div className="flex items-center gap-3 min-w-0">
           <button
             type="button"
@@ -221,16 +224,16 @@ export default function App() {
 
         <nav
           aria-label="Phạm vi khu vực"
-          className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-500"
+          className="hidden md:flex min-w-0 items-center gap-4 lg:gap-6 text-xs font-medium text-slate-500"
         >
-          <span className="text-slate-900 whitespace-nowrap shrink-0">
+          <span className="text-slate-900 whitespace-nowrap truncate">
             {activeNavMeta.label}
           </span>
-          <span aria-hidden="true">·</span>
+          <span aria-hidden="true" className="shrink-0">·</span>
           <span className="whitespace-nowrap shrink-0">
             {activeScenarioData.name}
           </span>
-          <span aria-hidden="true">·</span>
+          <span aria-hidden="true" className="shrink-0">·</span>
           <span className="font-num whitespace-nowrap shrink-0">
             Chưa xác nhận: {activeResult.dataGovernance.unconfirmedCount}/
             {activeResult.dataGovernance.totalTrackedItems}
@@ -249,64 +252,118 @@ export default function App() {
         </div>
       </header>
 
-      <div className="flex">
-        {/* Sidebar Navigation (6 Core Sections) */}
+      <div className="flex w-full min-w-0">
+        {/* Sidebar Navigation (6 Core Sections, collapsible on desktop) */}
         <aside
-          className={`fixed inset-y-14 left-0 z-20 w-64 border-r border-slate-200 bg-white transition-transform lg:static lg:inset-auto lg:block lg:translate-x-0 ${
-            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className={`fixed inset-y-14 left-0 z-20 shrink-0 border-r border-slate-200 bg-white transition-all duration-200 lg:static lg:inset-auto lg:block lg:translate-x-0 ${
+            sidebarCollapsed ? 'lg:w-14' : 'w-56'
+          } ${mobileMenuOpen ? 'w-60 translate-x-0' : '-translate-x-full'}`}
         >
-          <div className="flex h-full flex-col justify-between p-4">
-            <nav aria-label="Điều hướng chính" className="space-y-1">
-              {NAV_ITEMS.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeNav === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => {
-                      setActiveNav(item.id);
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-xs font-medium transition-colors whitespace-nowrap ${
-                      isActive
-                        ? 'bg-emerald-50 text-emerald-800 font-semibold'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <Icon
-                      className={`h-4 w-4 shrink-0 ${
-                        isActive ? 'text-emerald-700' : 'text-slate-400'
-                      }`}
-                    />
-                    <span className="truncate">{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div className="mt-6 border-t border-slate-200 pt-4 text-[11px] leading-relaxed text-slate-500">
-              <div className="font-medium text-slate-700">Lưu trữ cục bộ</div>
-              <p className="mt-1">
-                Dữ liệu lưu trên trình duyệt này và không tự đồng bộ sang máy khác.
-              </p>
-              <button
-                type="button"
-                onClick={() => exportPlanToJson(state)}
-                className="mt-2 inline-flex items-center gap-1 font-medium text-emerald-700 hover:underline"
+          <div
+            className={`flex h-full flex-col justify-between ${
+              sidebarCollapsed ? 'lg:p-2' : 'p-3'
+            }`}
+          >
+            <div>
+              <div
+                className={`mb-2 hidden lg:flex ${
+                  sidebarCollapsed ? 'justify-center' : 'justify-end'
+                }`}
               >
-                <Download className="h-3 w-3" />
-                Sao lưu JSON ngay
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setSidebarCollapsed((v) => !v)}
+                  title={sidebarCollapsed ? 'Mở rộng menu bên' : 'Thu gọn menu để xem toàn màn hình'}
+                  aria-label={sidebarCollapsed ? 'Mở rộng menu bên' : 'Thu gọn menu bên'}
+                  className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                >
+                  {sidebarCollapsed ? (
+                    <PanelLeftOpen className="h-4 w-4" />
+                  ) : (
+                    <>
+                      <PanelLeftClose className="h-3.5 w-3.5" />
+                      <span>Thu gọn</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <nav aria-label="Điều hướng chính" className="space-y-1">
+                {NAV_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeNav === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      title={item.label}
+                      onClick={() => {
+                        setActiveNav(item.id);
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`flex w-full items-center rounded-md text-left text-xs font-medium transition-colors whitespace-nowrap ${
+                        sidebarCollapsed
+                          ? 'lg:justify-center lg:px-2 lg:py-2.5 px-3 py-2.5 gap-2.5'
+                          : 'gap-2.5 px-3 py-2.5'
+                      } ${
+                        isActive
+                          ? 'bg-emerald-50 text-emerald-800 font-semibold'
+                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                      }`}
+                    >
+                      <Icon
+                        className={`h-4 w-4 shrink-0 ${
+                          isActive ? 'text-emerald-700' : 'text-slate-400'
+                        }`}
+                      />
+                      <span
+                        className={`truncate ${
+                          sidebarCollapsed ? 'lg:hidden' : ''
+                        }`}
+                      >
+                        {item.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
+
+            {!sidebarCollapsed ? (
+              <div className="mt-6 border-t border-slate-200 pt-4 text-[11px] leading-relaxed text-slate-500">
+                <div className="font-medium text-slate-700">Lưu trữ cục bộ</div>
+                <p className="mt-1">
+                  Dữ liệu lưu trên trình duyệt này và không tự đồng bộ sang máy khác.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => exportPlanToJson(state)}
+                  className="mt-2 inline-flex items-center gap-1 font-medium text-emerald-700 hover:underline"
+                >
+                  <Download className="h-3 w-3" />
+                  Sao lưu JSON ngay
+                </button>
+              </div>
+            ) : (
+              <div className="mt-6 hidden lg:flex justify-center border-t border-slate-200 pt-3">
+                <button
+                  type="button"
+                  onClick={() => exportPlanToJson(state)}
+                  title="Sao lưu JSON ngay"
+                  aria-label="Sao lưu JSON ngay"
+                  className="rounded-md p-2 text-emerald-700 hover:bg-emerald-50"
+                >
+                  <Download className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
         </aside>
 
         {/* Main Workspace */}
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 overflow-x-hidden">
           {/* Workspace Toolbar: Scenario Switcher, Undo & Save Status */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-2.5 lg:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-2.5 lg:px-5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-medium text-slate-500 whitespace-nowrap">
                 Kịch bản:
@@ -329,7 +386,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-xs">
+            <div className="flex flex-wrap items-center gap-2.5 text-xs">
               <button
                 type="button"
                 onClick={handleUndo}
@@ -350,7 +407,7 @@ export default function App() {
                 Sao lưu JSON
               </button>
 
-              <span className="hidden sm:inline font-num text-[11px] text-slate-400 whitespace-nowrap">
+              <span className="hidden xl:inline font-num text-[11px] text-slate-400 whitespace-nowrap">
                 Đã lưu cục bộ lúc{' '}
                 {new Date(state.lastSavedAt).toLocaleTimeString('vi-VN', {
                   hour: '2-digit',
@@ -361,8 +418,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* Active View */}
-          <div className="mx-auto max-w-[1440px] p-4 lg:p-6">
+          {/* Active View (Full-width responsive container) */}
+          <div className="w-full p-4 lg:p-5">
             {activeNav === 'dashboard' && (
               <DashboardView
                 scenario={activeScenarioData}
