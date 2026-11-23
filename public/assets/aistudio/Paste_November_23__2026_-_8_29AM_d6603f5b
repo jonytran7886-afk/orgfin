@@ -1,0 +1,1123 @@
+# PROMPT XÂY DỰNG HỆ THỐNG QUẢN TRỊ KẾ HOẠCH KINH DOANH & TÀI CHÍNH
+## ORGANIC VIỆT NAM – BUSINESS PLANNING & FINANCIAL DASHBOARD
+
+### I. MỤC TIÊU HỆ THỐNG
+
+Xây dựng một ứng dụng quản trị kế hoạch kinh doanh và tài chính cho Organic Việt Nam, hoạt động như một bảng tính tài chính thông minh kết hợp Dashboard quản trị.
+
+Hệ thống phục vụ:
+
+- Ban điều hành: xem nhanh doanh thu, chi phí, lợi nhuận, dòng tiền, vốn đầu tư và hiệu quả hoạt động.
+- Bộ phận kinh doanh: quản lý giá bán, kênh phân phối, sản lượng, hoa hồng và hiệu quả từng kênh.
+- Bộ phận tài chính: lập ngân sách, tính giá vốn, lợi nhuận, điểm hòa vốn và dự báo dòng tiền.
+- Bộ phận Marketing: lập ngân sách và đánh giá hiệu quả các chương trình bán hàng.
+- Bộ phận vận hành: xác định chi phí giết mổ, sơ chế, đóng gói, vận chuyển, kho bãi và hao hụt.
+
+**Nguyên tắc quan trọng nhất:**
+
+Tất cả chỉ số phải được tính toán tự động từ dữ liệu đầu vào. Khi thay đổi một thông số, toàn bộ chỉ tiêu liên quan phải cập nhật tức thì.
+
+Đây là công cụ lập kế hoạch, mô phỏng và hỗ trợ ra quyết định; không phải phần mềm kế toán hoặc hệ thống ghi nhận giao dịch hàng ngày.
+
+Không sử dụng database. Dữ liệu được lưu cục bộ, hỗ trợ sao lưu và phục hồi bằng file.
+
+Không chỉ định trước ngôn ngữ hoặc công nghệ. Hãy lựa chọn phương pháp triển khai phù hợp với môi trường Google AI Studio.
+
+---
+
+# II. NGUYÊN TẮC THIẾT KẾ NGHIỆP VỤ
+
+### 2.1. Phân biệt dữ liệu đầu vào và dữ liệu tính toán
+
+Hệ thống có hai loại giá trị:
+
+**Input – Dữ liệu được phép chỉnh sửa:**
+
+- Giá mua.
+- Giá bán.
+- Trọng lượng.
+- Tỷ lệ thu hồi.
+- Sản lượng.
+- Chi phí.
+- Hoa hồng.
+- Ngân sách.
+- Số lượng cửa hàng.
+- Các giả định về công nợ, thuế và vốn đầu tư.
+
+**Calculated – Dữ liệu tự động tính:**
+
+- Giá vốn.
+- Doanh thu.
+- Lãi gộp.
+- Lãi đóng góp.
+- Lợi nhuận hoạt động.
+- Điểm hòa vốn.
+- Chi phí bình quân.
+- Vốn cần thiết.
+- Dòng tiền.
+- Các tỷ suất tài chính.
+
+Không cho phép chỉnh sửa trực tiếp các giá trị Calculated. Muốn thay đổi kết quả, người dùng phải chỉnh dữ liệu đầu vào tương ứng.
+
+### 2.2. Trạng thái của dữ liệu
+
+Mỗi khoản chi phí hoặc thông số phải có một trạng thái:
+
+- Chưa nhập.
+- Giả định.
+- Đã có báo giá.
+- Đã xác nhận.
+- Đã phê duyệt.
+
+Cho phép lưu nguồn dữ liệu, ngày cập nhật, người phụ trách và ghi chú.
+
+Không được tự động coi giá trị giả định là chi phí thực tế đã được chốt.
+
+Các Dashboard phải cho biết báo cáo hiện sử dụng bao nhiêu thông số chưa xác nhận.
+
+### 2.3. Đơn vị tính
+
+Hỗ trợ:
+
+- VNĐ.
+- VNĐ/kg.
+- VNĐ/con.
+- VNĐ/đơn hàng.
+- VNĐ/tháng.
+- Con.
+- Kg.
+- Tấn.
+- Phần trăm.
+- Ngày.
+- Tháng.
+- Năm.
+
+Tỷ lệ phần trăm phải được tính nhất quán, ví dụ 70% tương ứng với 0,70 trong phép tính.
+
+Bắt buộc phân biệt trọng lượng sống và trọng lượng thành phẩm.
+
+---
+
+# III. CẤU TRÚC GIAO DIỆN
+
+Hệ thống gồm 6 khu vực chính:
+
+1. Tổng quan – Dashboard.
+2. Sản phẩm, giá vốn và doanh thu.
+3. Chi phí hoạt động.
+4. Đầu tư, văn phòng và điểm bán.
+5. Kế hoạch tài chính.
+6. Thông số và dữ liệu.
+
+Không tạo quá nhiều menu con.
+
+Mỗi khu vực sử dụng bảng dữ liệu có thể chỉnh trực tiếp.
+
+Dashboard hiển thị kết quả và cho phép chỉnh nhanh các thông số quan trọng.
+
+---
+
+# IV. QUẢN LÝ SẢN PHẨM VÀ GIÁ VỐN
+
+## 4.1. Cấu trúc sản phẩm
+
+Mỗi sản phẩm có các trường:
+
+| Trường | Ý nghĩa |
+|---|---|
+| Product ID | Mã sản phẩm duy nhất |
+| Tên sản phẩm | Tên hiển thị |
+| Nhóm sản phẩm | Gà, lợn, bò, trứng, rau củ... |
+| Nguồn cung | Tự sản xuất / Thu mua |
+| Đơn vị nhập | Kg sống, con, kg... |
+| Đơn vị bán | Kg thành phẩm, con, hộp... |
+| Giá đầu vào | Giá mua hoặc giá thành sản xuất |
+| Giá bán | Giá bán mục tiêu |
+| Sản lượng | Số lượng dự kiến |
+| Tỷ lệ thu hồi | Tỷ lệ thành phẩm sau sơ chế |
+| Tỷ lệ hao hụt | Hao hụt thương mại nếu có |
+| Trạng thái | Giả định / đã xác nhận |
+
+Một sản phẩm có thể có nhiều nguồn cung, nhiều quy cách và nhiều giá bán theo kênh.
+
+## 4.2. Mô hình tính giá vốn gà
+
+Với sản phẩm gà, bắt buộc có các thông số:
+
+- Trọng lượng sống bình quân/con.
+- Giá mua/kg sống.
+- Số lượng gà đầu vào.
+- Tỷ lệ thu hồi sau giết mổ.
+- Khối lượng thành phẩm.
+- Chi phí vận chuyển gà sống.
+- Chi phí giết mổ.
+- Chi phí sơ chế.
+- Chi phí bao bì.
+- Chi phí đóng gói.
+- Chi phí bảo quản biến đổi.
+- Chi phí hao hụt.
+- Chi phí phân phối biến đổi.
+
+### Công thức 01 – Trọng lượng sống đầu vào
+
+Trọng lượng sống = Số con đầu vào × Trọng lượng sống bình quân/con.
+
+### Công thức 02 – Chi phí mua gà
+
+Chi phí mua gà = Trọng lượng sống đầu vào × Giá mua/kg sống.
+
+### Công thức 03 – Trọng lượng thành phẩm
+
+Trọng lượng thành phẩm = Trọng lượng sống đầu vào × Tỷ lệ thu hồi.
+
+### Công thức 04 – Khối lượng thành phẩm bán được
+
+Khối lượng bán được = Trọng lượng thành phẩm × (1 − Tỷ lệ hao hụt thương mại).
+
+Không tính trùng hao hụt giết mổ với hao hụt thương mại.
+
+### Công thức 05 – Tổng giá vốn thành phẩm
+
+Tổng giá vốn thành phẩm =
+Chi phí mua gà
++ Vận chuyển đầu vào
++ Giết mổ
++ Sơ chế
++ Đóng gói
++ Bao bì
++ Chi phí sản xuất trực tiếp khác
++ Chi phí sản xuất chung được phân bổ hợp lệ.
+
+Chi phí giao hàng cho khách và hoa hồng bán hàng không thuộc giá vốn sản xuất. Những khoản này được ghi nhận là chi phí bán hàng.
+
+### Công thức 06 – Giá vốn trên mỗi kg thành phẩm
+
+Giá vốn/kg thành phẩm = Tổng giá vốn thành phẩm / Khối lượng thành phẩm đạt tiêu chuẩn.
+
+Nếu khối lượng thành phẩm bằng 0, hiển thị cảnh báo thay vì thực hiện phép chia.
+
+### Công thức 07 – Giá vốn mỗi con
+
+Giá vốn/con = Tổng giá vốn thành phẩm / Số con đạt tiêu chuẩn.
+
+### Công thức 08 – Doanh thu thành phẩm
+
+Doanh thu gộp = Khối lượng thành phẩm thực bán × Giá bán/kg thành phẩm.
+
+Nếu bán nguyên con theo giá cố định, sử dụng:
+
+Doanh thu gộp = Số con thực bán × Giá bán/con.
+
+Mỗi SKU phải xác định rõ đơn vị bán và công thức tương ứng.
+
+### Ví dụ kiểm tra
+
+Thông số:
+
+- 1 con gà.
+- Trọng lượng sống: 2 kg.
+- Giá mua: 65.000đ/kg sống.
+- Tỷ lệ thu hồi: 70%.
+- Giá bán: 180.000đ/kg thành phẩm.
+- Chưa tính hao hụt thương mại.
+
+Kết quả:
+
+- Giá mua gà: 130.000đ.
+- Khối lượng thành phẩm: 1,4 kg.
+- Doanh thu gộp: 252.000đ.
+
+Không được tính doanh thu là 360.000đ nếu giá bán đang được định nghĩa theo kg thành phẩm.
+
+## 4.3. Trường hợp gà tự nuôi
+
+Không sử dụng giá mua gà ngoài thị trường để thay thế giá thành sản xuất.
+
+Giá thành gà tự nuôi phải tính từ:
+
+- Con giống.
+- Thức ăn.
+- Thảo dược.
+- Thuốc, vaccine, thú y.
+- Nhân công trực tiếp.
+- Điện, nước, chất độn chuồng.
+- Vận hành chuồng trại.
+- Khấu hao tài sản sản xuất.
+- Chi phí sản xuất chung.
+- Hao hụt và tỷ lệ chết.
+- Chi phí liên quan khác.
+
+Công thức:
+
+Giá thành sản xuất/kg sống =
+Tổng chi phí sản xuất của lứa gà được phân bổ cho sản phẩm đạt chuẩn / Tổng kg sống đạt chuẩn xuất chuồng.
+
+Sau đó cộng chi phí giết mổ, sơ chế và đóng gói để hình thành giá vốn thành phẩm.
+
+Không cộng lại các khoản đã nằm trong giá thành sản xuất.
+
+---
+
+# V. QUẢN LÝ KÊNH BÁN VÀ DOANH THU
+
+Các kênh ban đầu:
+
+- Khách hàng trực tiếp.
+- CTV.
+- Đại lý.
+- Cửa hàng Organic Việt Nam.
+- Khách hàng tổ chức/bếp ăn.
+
+Mỗi sản phẩm có thể có giá bán và chi phí khác nhau theo kênh.
+
+## 5.1. Cấu trúc dữ liệu kênh bán
+
+Mỗi dòng kế hoạch gồm:
+
+- Tháng.
+- Sản phẩm/SKU.
+- Nguồn cung.
+- Kênh bán.
+- Sản lượng bán dự kiến.
+- Đơn vị bán.
+- Giá bán.
+- Tỷ lệ giảm giá.
+- Giá trị hàng trả lại.
+- Hoa hồng.
+- Chiết khấu thương mại.
+- Phí thanh toán.
+- Chi phí giao hàng.
+- Chi phí phục vụ khách hàng.
+- Doanh thu thuần.
+- Lãi đóng góp.
+
+## 5.2. Công thức doanh thu
+
+### Công thức 09 – Doanh thu gộp
+
+Doanh thu gộp = Sản lượng bán × Đơn giá bán.
+
+### Công thức 10 – Giảm trừ doanh thu
+
+Giảm trừ doanh thu =
+Chiết khấu thương mại
++ Giảm giá hàng bán
++ Giá trị hàng bán bị trả lại.
+
+Chỉ tính các khoản thuộc giảm trừ doanh thu, không gộp chi phí Marketing hoặc hoa hồng CTV vào đây.
+
+### Công thức 11 – Doanh thu thuần
+
+Doanh thu thuần = Doanh thu gộp − Giảm trừ doanh thu − Thuế gián thu phải loại khỏi doanh thu (nếu giá nhập đã bao gồm thuế).
+
+Hệ thống phải có quy tắc xử lý giá đã gồm thuế/chưa gồm thuế.
+
+Không tự động trừ thuế GTGT lần thứ hai nếu giá đầu vào đã là giá chưa thuế.
+
+### Công thức 12 – Giá vốn hàng bán
+
+Giá vốn hàng bán =
+Số lượng hoặc khối lượng thực bán × Giá vốn tương ứng.
+
+Khi sản phẩm có nhiều nguồn cung, sử dụng phương pháp giá vốn đã cấu hình, không tự ý lấy giá vốn một nguồn áp dụng cho nguồn khác.
+
+### Công thức 13 – Lợi nhuận gộp
+
+Lợi nhuận gộp = Doanh thu thuần − Giá vốn hàng bán.
+
+### Công thức 14 – Chi phí bán hàng biến đổi
+
+Chi phí bán hàng biến đổi =
+Hoa hồng CTV
++ Thưởng nhân viên tính theo đơn
++ Phí giao hàng
++ Phí thanh toán
++ Chi phí phục vụ đơn hàng
++ Khuyến mại hạch toán là chi phí
++ Các khoản biến đổi khác.
+
+### Công thức 15 – Lãi đóng góp theo kênh
+
+Lãi đóng góp = Doanh thu thuần − Giá vốn hàng bán − Chi phí bán hàng biến đổi − Chi phí biến đổi khác được phân bổ cho kênh.
+
+### Công thức 16 – Biên lãi đóng góp
+
+Biên lãi đóng góp (%) = Lãi đóng góp / Doanh thu thuần × 100.
+
+Nếu doanh thu thuần bằng 0, hiển thị không xác định.
+
+### Công thức 17 – Lãi đóng góp trên đơn vị
+
+Lãi đóng góp/đơn vị = Lãi đóng góp / Sản lượng bán.
+
+### Công thức 18 – Tổng hợp doanh thu từng kênh
+
+Doanh thu kênh = Tổng doanh thu thuần của tất cả sản phẩm thuộc kênh đó.
+
+### Công thức 19 – Tổng lãi đóng góp từng kênh
+
+Lãi đóng góp kênh = Tổng lãi đóng góp của tất cả sản phẩm thuộc kênh đó.
+
+Không tính doanh thu chuyển hàng nội bộ từ kho sang cửa hàng trực thuộc là doanh thu bán ra ngoài doanh nghiệp.
+
+---
+
+# VI. CHÍNH SÁCH HOA HỒNG CTV VÀ NHÂN VIÊN
+
+## 6.1. Hoa hồng CTV
+
+Hỗ trợ ba hình thức:
+
+1. Mức cố định trên mỗi con/kg/đơn hàng.
+2. Tỷ lệ phần trăm doanh thu thuần.
+3. Tỷ lệ phần trăm lãi đóng góp trước hoa hồng.
+
+Mỗi kênh hoặc chương trình chỉ chọn một phương thức chính, trừ khi có cấu hình thưởng bổ sung.
+
+### Công thức 20 – Hoa hồng cố định
+
+Hoa hồng = Sản lượng đủ điều kiện × Mức hoa hồng/đơn vị.
+
+### Công thức 21 – Hoa hồng theo doanh thu
+
+Hoa hồng = Doanh thu thuần đủ điều kiện × Tỷ lệ hoa hồng.
+
+### Công thức 22 – Hoa hồng theo lãi đóng góp
+
+Hoa hồng = Lãi đóng góp trước hoa hồng × Tỷ lệ được hưởng.
+
+Nếu lãi đóng góp trước hoa hồng nhỏ hơn hoặc bằng 0, hoa hồng theo cơ chế này bằng 0, trừ trường hợp có chính sách bảo đảm riêng được phê duyệt.
+
+### Công thức 23 – Tổng thưởng bán hàng
+
+Tổng thưởng =
+Hoa hồng cơ sở
++ Thưởng vượt KPI
++ Thưởng khách hàng mới
++ Thưởng khách hàng mua lại
++ Các khoản thưởng hợp lệ khác.
+
+### Công thức 24 – Kiểm soát trần thưởng
+
+Trần thưởng cho một đơn/nhóm đơn =
+Lãi đóng góp trước thưởng × Tỷ lệ ngân sách thưởng tối đa.
+
+Nếu tổng thưởng dự kiến vượt trần, hệ thống phải cảnh báo và hiển thị phần vượt.
+
+Không tự động thay đổi chính sách đã nhập mà không thông báo.
+
+## 6.2. Nhân viên kinh doanh
+
+Thu nhập nhân viên gồm:
+
+- Lương cố định.
+- Phụ cấp.
+- Thưởng doanh số.
+- Thưởng KPI.
+- Thưởng khách hàng mới.
+- Thưởng mở điểm bán.
+- Thưởng hiệu quả nhóm.
+
+### Công thức 25 – Tổng chi phí nhân viên
+
+Tổng chi phí nhân viên =
+Lương
++ Phụ cấp
++ Thưởng
++ Chi phí bảo hiểm và nghĩa vụ của doanh nghiệp
++ Chi phí nhân sự khác.
+
+Lương cố định phải được tính vào chi phí hoạt động của kỳ.
+
+Thưởng biến đổi theo đơn phải được tính một lần trong chi phí bán hàng biến đổi.
+
+Không cộng trùng thưởng biến đổi khi tổng hợp bảng lương và P&L.
+
+---
+
+# VII. QUẢN LÝ CHI PHÍ HOẠT ĐỘNG
+
+## 7.1. Cấu trúc một dòng chi phí
+
+Mỗi dòng gồm:
+
+- Cost ID.
+- Nhóm chi phí.
+- Hạng mục.
+- Bộ phận.
+- Trung tâm chi phí.
+- Sản phẩm hoặc kênh liên quan.
+- Loại chi phí: cố định/biến đổi.
+- Phân loại kế toán: giá vốn, bán hàng, quản lý, tài chính...
+- Số lượng.
+- Đơn giá.
+- Tần suất.
+- Ngày bắt đầu.
+- Ngày kết thúc.
+- Tháng áp dụng.
+- Tỷ lệ phân bổ.
+- Thành tiền.
+- Trạng thái dữ liệu.
+- Ghi chú.
+
+## 7.2. Nhóm chi phí
+
+Bao gồm:
+
+1. Sản xuất và giá vốn.
+2. Giết mổ và sơ chế.
+3. Bao bì và đóng gói.
+4. Kho và bảo quản.
+5. Logistics và giao hàng.
+6. Nhân sự.
+7. CTV và đại lý.
+8. Marketing.
+9. Truyền thông.
+10. Văn phòng.
+11. Cửa hàng và điểm bán.
+12. Công nghệ và quản lý.
+13. Chi phí tài chính.
+14. Dự phòng và chi phí khác.
+
+## 7.3. Công thức tính chi phí
+
+### Công thức 26 – Chi phí theo số lượng
+
+Chi phí = Số lượng × Đơn giá.
+
+### Công thức 27 – Chi phí biến đổi theo sản lượng
+
+Chi phí biến đổi = Sản lượng thực hiện × Định mức chi phí/đơn vị.
+
+### Công thức 28 – Chi phí cố định tháng
+
+Chi phí cố định tháng = Tổng các khoản chi phí cố định có hiệu lực trong tháng.
+
+### Công thức 29 – Chi phí định kỳ
+
+Chi phí trong tháng được tính theo lịch phát sinh đã thiết lập.
+
+Hỗ trợ:
+
+- Một lần.
+- Hàng tháng.
+- Hàng quý.
+- Hàng năm.
+
+Không chia đều toàn bộ chi phí một lần cho 12 tháng nếu khoản đó được ghi nhận tại một thời điểm cụ thể.
+
+### Công thức 30 – Chi phí phân bổ
+
+Chi phí phân bổ cho đối tượng =
+Tổng chi phí chung × Tỷ lệ phân bổ cho đối tượng.
+
+Tổng các tỷ lệ phân bổ phải bằng 100% đối với khoản được phân bổ toàn bộ.
+
+Cảnh báo khi tổng tỷ lệ vượt 100%.
+
+Không cộng chi phí phân bổ vào P&L tổng công ty lần thứ hai nếu chi phí gốc đã được tính.
+
+---
+
+# VIII. ĐẦU TƯ, VĂN PHÒNG, CỬA HÀNG VÀ ĐIỂM BÁN
+
+## 8.1. Các nhóm tài sản và đầu tư
+
+- Xây dựng, cải tạo văn phòng.
+- Nội thất văn phòng.
+- Thiết bị làm việc.
+- Xây dựng cửa hàng.
+- Kệ và quầy trưng bày.
+- Tủ mát, tủ đông.
+- Thiết bị bảo quản.
+- Máy đóng gói.
+- Kho lạnh.
+- Xe vận chuyển.
+- Thiết bị tại điểm bán.
+- Hạ tầng công nghệ.
+- Đầu tư khác.
+
+## 8.2. Dữ liệu mỗi hạng mục đầu tư
+
+- Asset ID.
+- Tên hạng mục.
+- Nhóm tài sản.
+- Địa điểm.
+- Số lượng.
+- Đơn giá.
+- Tổng vốn đầu tư.
+- Ngày dự kiến thanh toán.
+- Ngày đưa vào sử dụng.
+- Thời gian khấu hao/phân bổ.
+- Giá trị thu hồi ước tính nếu có.
+- Chi phí vận hành cố định hàng tháng.
+- Chi phí bảo trì.
+- Trạng thái triển khai.
+
+### Công thức 31 – Tổng vốn đầu tư
+
+Tổng vốn đầu tư = Tổng của (Số lượng × Đơn giá) cho các hạng mục đầu tư.
+
+### Công thức 32 – Khấu hao đường thẳng tháng
+
+Khấu hao tháng =
+(Nguyên giá khấu hao − Giá trị còn lại dự kiến) / Số tháng khấu hao.
+
+Chỉ bắt đầu khi tài sản đủ điều kiện đưa vào sử dụng theo quy tắc cấu hình.
+
+Đây là công thức mô phỏng cho mục đích lập kế hoạch. Không tự động coi mọi khoản đầu tư đều là tài sản đủ điều kiện khấu hao.
+
+### Công thức 33 – Chi phí vận hành điểm bán
+
+Chi phí vận hành =
+Thuê mặt bằng
++ Lương cố định
++ Điện nước
++ Internet
++ Bảo trì
++ Chi phí vận hành cố định khác
++ Khấu hao hợp lệ.
+
+### Công thức 34 – Lợi nhuận hoạt động điểm bán
+
+Lợi nhuận hoạt động điểm bán =
+Lãi đóng góp của điểm bán
+− Chi phí cố định trực tiếp của điểm bán
+− Chi phí chung được phân bổ.
+
+Chi phí chung phân bổ phải được hiển thị riêng để có thể xem lợi nhuận trước và sau phân bổ.
+
+### Công thức 35 – Điểm hòa vốn cửa hàng
+
+Sản lượng hòa vốn cửa hàng =
+Chi phí cố định tháng / Lãi đóng góp bình quân trên một đơn vị bán.
+
+Chỉ áp dụng khi lãi đóng góp bình quân lớn hơn 0.
+
+---
+
+# IX. MARKETING VÀ TRUYỀN THÔNG
+
+Quản lý chi phí Marketing và truyền thông theo tháng, chiến dịch và mục tiêu.
+
+Các chỉ số:
+
+- Tổng ngân sách.
+- Ngân sách đã phân bổ.
+- Chi phí quảng cáo.
+- Chi phí nội dung.
+- Chi phí video.
+- Chi phí thiết kế.
+- Chi phí POSM.
+- Chi phí chương trình dùng thử.
+- Chi phí phát triển điểm bán.
+- Tổng khách hàng tiềm năng.
+- Số khách hàng mới.
+- Số đơn hàng.
+- Doanh thu quy thuộc chiến dịch.
+
+### Công thức 36 – Chi phí Marketing trên một đơn hàng
+
+Chi phí Marketing/đơn = Chi phí Marketing liên quan / Số đơn hàng quy thuộc.
+
+### Công thức 37 – Chi phí thu hút khách hàng mới (CAC)
+
+CAC = Chi phí thu hút khách hàng được phân bổ / Số khách hàng mới có được.
+
+Nếu số khách hàng mới bằng 0, hiển thị không xác định.
+
+### Công thức 38 – Tỷ lệ chuyển đổi
+
+Tỷ lệ chuyển đổi = Số khách hàng tiềm năng chuyển thành khách mua / Tổng khách hàng tiềm năng hợp lệ × 100.
+
+### Công thức 39 – ROAS
+
+ROAS = Doanh thu quy thuộc quảng cáo / Chi phí quảng cáo.
+
+ROAS không phải lợi nhuận.
+
+### Công thức 40 – Hiệu quả Marketing theo lãi đóng góp
+
+Hiệu quả đóng góp Marketing =
+Lãi đóng góp quy thuộc trước chi phí Marketing − Chi phí Marketing liên quan.
+
+Không lấy toàn bộ doanh thu để đánh giá Marketing có lãi hay không.
+
+Chi phí Marketing đã phân bổ vào đơn hàng không được trừ thêm lần thứ hai trong P&L.
+
+Phải tách:
+
+- Marketing chuyển đổi bán hàng.
+- Truyền thông và xây dựng thương hiệu.
+- Hỗ trợ bán hàng tại điểm bán.
+
+---
+
+# X. BÁO CÁO LỢI NHUẬN – P&L
+
+Báo cáo theo tháng, quý và năm.
+
+Cấu trúc bắt buộc:
+
+1. Doanh thu gộp.
+2. Giảm trừ doanh thu.
+3. Doanh thu thuần.
+4. Giá vốn hàng bán.
+5. Lợi nhuận gộp.
+6. Chi phí bán hàng biến đổi.
+7. Lãi đóng góp.
+8. Chi phí bán hàng cố định.
+9. Marketing.
+10. Truyền thông.
+11. Chi phí quản lý.
+12. Chi phí vận hành cố định khác.
+13. Khấu hao/phân bổ chưa nằm trong các khoản trên.
+14. Lợi nhuận hoạt động.
+15. Thu nhập, chi phí tài chính và các khoản ngoài hoạt động.
+16. Lợi nhuận trước thuế.
+17. Thuế thu nhập dự kiến.
+18. Lợi nhuận sau thuế.
+
+### Công thức 41 – Lợi nhuận hoạt động
+
+Lợi nhuận hoạt động =
+Lãi đóng góp
+− Tổng chi phí hoạt động cố định
+− Khấu hao/phân bổ liên quan chưa được tính.
+
+### Công thức 42 – Lợi nhuận trước thuế
+
+Lợi nhuận trước thuế =
+Lợi nhuận hoạt động
++ Thu nhập khác
+− Chi phí tài chính
+− Chi phí khác.
+
+### Công thức 43 – Thuế thu nhập dự kiến
+
+Thuế thu nhập dự kiến được tính theo cấu hình thuế và cơ sở tính thuế phù hợp.
+
+Cho phép nhập thuế suất và các điều chỉnh thuế.
+
+Không mặc định lợi nhuận kế toán luôn bằng thu nhập chịu thuế.
+
+### Công thức 44 – Lợi nhuận sau thuế
+
+Lợi nhuận sau thuế = Lợi nhuận trước thuế − Thuế thu nhập dự kiến.
+
+### Công thức 45 – Biên lợi nhuận ròng
+
+Biên lợi nhuận ròng = Lợi nhuận sau thuế / Doanh thu thuần × 100.
+
+### Công thức 46 – Lợi nhuận trên mỗi đơn vị
+
+Lợi nhuận/đơn vị =
+Lợi nhuận được phân bổ hợp lệ / Sản lượng bán tương ứng.
+
+Phải thể hiện đây là lợi nhuận sau phân bổ, không phải lãi đóng góp đơn vị.
+
+---
+
+# XI. ĐIỂM HÒA VỐN VÀ PHÂN TÍCH ĐỘ NHẠY
+
+## 11.1. Điểm hòa vốn một sản phẩm
+
+### Công thức 47
+
+Sản lượng hòa vốn =
+Tổng chi phí cố định / Lãi đóng góp trên mỗi đơn vị.
+
+Điều kiện: Lãi đóng góp/đơn vị lớn hơn 0.
+
+## 11.2. Điểm hòa vốn nhiều kênh
+
+### Công thức 48
+
+Lãi đóng góp bình quân gia quyền =
+Tổng (Tỷ trọng sản lượng kênh × Lãi đóng góp/đơn vị của kênh).
+
+### Công thức 49
+
+Sản lượng hòa vốn chung =
+Tổng chi phí cố định / Lãi đóng góp bình quân gia quyền.
+
+Chỉ áp dụng cho các đơn vị sản lượng quy đổi tương thích. Nếu nhiều nhóm sản phẩm có đơn vị khác nhau, sử dụng tỷ lệ lãi đóng góp trên doanh thu để tính doanh thu hòa vốn theo cơ cấu doanh thu kế hoạch.
+
+## 11.3. Biên an toàn
+
+### Công thức 50
+
+Biên an toàn sản lượng (%) =
+(Sản lượng kế hoạch − Sản lượng hòa vốn) / Sản lượng kế hoạch × 100.
+
+## 11.4. Phân tích độ nhạy
+
+Cho phép thử thay đổi:
+
+- Giá mua.
+- Giá bán.
+- Tỷ lệ thu hồi.
+- Sản lượng.
+- Hoa hồng.
+- Marketing.
+- Chi phí nhân sự.
+- Số lượng cửa hàng.
+- Chi phí đầu tư.
+
+Mỗi thay đổi phải tính lại:
+
+- Doanh thu.
+- Giá vốn.
+- Lãi đóng góp.
+- Lợi nhuận hoạt động.
+- Điểm hòa vốn.
+- Dòng tiền.
+
+Có thể thay đổi nhiều thông số đồng thời.
+
+---
+
+# XII. QUẢN LÝ DÒNG TIỀN
+
+Báo cáo dòng tiền riêng với P&L.
+
+## 12.1. Các chỉ số
+
+- Tiền đầu kỳ.
+- Thu tiền khách hàng.
+- Thanh toán nhà cung cấp.
+- Chi lương và nhân sự.
+- Chi Marketing.
+- Chi quản lý.
+- Thu/chi thuế.
+- Chi đầu tư.
+- Tiền vay nhận được.
+- Trả gốc vay.
+- Trả lãi vay.
+- Tiền cuối kỳ.
+
+### Công thức 51 – Thu tiền khách hàng
+
+Thu tiền tháng =
+Thu từ doanh thu tháng hiện tại
++ Thu công nợ kỳ trước
+− Tiền hoàn trả khách hàng.
+
+Cho phép cấu hình tỷ lệ thu ngay và thời gian thu công nợ.
+
+### Công thức 52 – Tiền thanh toán nhà cung cấp
+
+Tiền chi mua hàng tháng =
+Thanh toán cho mua hàng kỳ hiện tại
++ Thanh toán công nợ mua hàng kỳ trước.
+
+Cho phép thiết lập thời gian trả nhà cung cấp.
+
+### Công thức 53 – Dòng tiền hoạt động
+
+Dòng tiền hoạt động =
+Thu tiền từ hoạt động kinh doanh
+− Chi tiền hoạt động kinh doanh.
+
+### Công thức 54 – Dòng tiền đầu tư
+
+Dòng tiền đầu tư =
+Thu từ thanh lý tài sản
+− Tiền chi mua sắm, xây dựng và đầu tư.
+
+### Công thức 55 – Dòng tiền tài chính
+
+Dòng tiền tài chính =
+Tiền vay nhận được
++ Vốn góp nhận được
+− Trả gốc vay
+− Phân phối vốn/lợi nhuận bằng tiền.
+
+Lãi vay được phân loại nhất quán theo chính sách dòng tiền áp dụng và không tính trùng.
+
+### Công thức 56 – Tiền cuối kỳ
+
+Tiền cuối kỳ =
+Tiền đầu kỳ
++ Dòng tiền hoạt động
++ Dòng tiền đầu tư
++ Dòng tiền tài chính.
+
+Tiền cuối kỳ của tháng trước là tiền đầu kỳ tháng sau.
+
+Nếu tiền cuối kỳ nhỏ hơn 0, hiển thị cảnh báo thiếu vốn.
+
+### Công thức 57 – Nhu cầu vốn bổ sung
+
+Nhu cầu vốn bổ sung tối thiểu =
+Giá trị tuyệt đối của mức tiền cuối kỳ âm thấp nhất trong kỳ kế hoạch, với giả định chưa bổ sung nguồn tài trợ mới.
+
+Có thể bổ sung mức dự trữ tiền mặt tối thiểu theo cấu hình.
+
+---
+
+# XIII. HỆ THỐNG DASHBOARD
+
+Dashboard phải trả lời ngay các câu hỏi:
+
+1. Doanh thu dự kiến bao nhiêu?
+2. Tổng chi phí bao nhiêu?
+3. Lợi nhuận bao nhiêu?
+4. Biên lợi nhuận bao nhiêu phần trăm?
+5. Đầu tư ban đầu bao nhiêu?
+6. Cần bán bao nhiêu sản phẩm để hòa vốn?
+7. Tháng nào thiếu tiền?
+8. Kênh nào có lãi đóng góp tốt?
+9. Chi phí nào chiếm tỷ trọng lớn?
+10. Nếu thay đổi giá hoặc chi phí thì lợi nhuận thay đổi thế nào?
+
+## 13.1. KPI Cards
+
+Hiển thị 8 chỉ tiêu ưu tiên:
+
+- Doanh thu thuần.
+- Giá vốn hàng bán.
+- Lãi đóng góp.
+- Lợi nhuận hoạt động.
+- Biên lợi nhuận hoạt động.
+- Tổng vốn đầu tư.
+- Điểm hòa vốn.
+- Tiền cuối kỳ.
+
+## 13.2. Biểu đồ
+
+Chỉ cần 3 biểu đồ chính:
+
+- Doanh thu, chi phí và lợi nhuận theo tháng.
+- Cơ cấu chi phí.
+- So sánh lãi đóng góp theo kênh.
+
+Không tạo quá nhiều biểu đồ làm rối Dashboard.
+
+## 13.3. Chỉnh sửa nhanh
+
+Dashboard có khu vực Quick Edit cho phép thay đổi trực tiếp:
+
+- Giá mua gà.
+- Giá bán.
+- Trọng lượng.
+- Tỷ lệ thu hồi.
+- Sản lượng.
+- Hoa hồng CTV.
+- Chi phí Marketing.
+- Chi phí cố định.
+- Số cửa hàng.
+- Chi phí đầu tư cửa hàng.
+
+Khi thay đổi phải cập nhật tất cả công thức liên quan theo đúng quan hệ dữ liệu.
+
+## 13.4. Cảnh báo
+
+Cảnh báo khi:
+
+- Lợi nhuận âm.
+- Lãi đóng góp âm.
+- Giá bán thấp hơn giá thành.
+- Dòng tiền âm.
+- Chi phí vượt ngân sách.
+- Hoa hồng vượt giới hạn.
+- Sản lượng chưa đủ hòa vốn.
+- Dữ liệu chưa xác nhận.
+- Tỷ lệ thu hồi không hợp lệ.
+- Phân bổ chi phí vượt 100%.
+- Có khả năng tính trùng khoản chi phí.
+
+---
+
+# XIV. KỊCH BẢN KINH DOANH
+
+Cung cấp 3 kịch bản độc lập:
+
+**Thận trọng:** Giá bán thấp hơn hoặc tiêu thụ chậm, chi phí có thể cao hơn.
+
+**Cơ sở:** Kế hoạch dự kiến.
+
+**Tăng trưởng:** Sản lượng tăng theo khả năng cung ứng và nhu cầu thị trường.
+
+Mỗi kịch bản có thể điều chỉnh các thông số riêng.
+
+Hệ thống phải tính lại đầy đủ P&L và dòng tiền cho từng kịch bản.
+
+Không chỉ nhân doanh thu hoặc lợi nhuận với một tỷ lệ tùy ý.
+
+Công thức phải tính lại từ dữ liệu đầu vào.
+
+Cho phép nhân bản kịch bản hiện tại.
+
+Hiển thị bảng so sánh:
+
+| Chỉ tiêu | Thận trọng | Cơ sở | Tăng trưởng |
+|---|---|---|---|
+| Doanh thu | Tự tính | Tự tính | Tự tính |
+| Giá vốn | Tự tính | Tự tính | Tự tính |
+| Lãi đóng góp | Tự tính | Tự tính | Tự tính |
+| Chi phí cố định | Tự tính | Tự tính | Tự tính |
+| Lợi nhuận hoạt động | Tự tính | Tự tính | Tự tính |
+| Điểm hòa vốn | Tự tính | Tự tính | Tự tính |
+| Vốn cần bổ sung | Tự tính | Tự tính | Tự tính |
+
+---
+
+# XV. QUY TẮC TỔNG HỢP VÀ CHỐNG TÍNH TRÙNG
+
+Đây là yêu cầu bắt buộc.
+
+Mỗi khoản chi phí chỉ được ghi nhận một lần trong P&L tổng công ty.
+
+Phải phân biệt:
+
+- Chi phí giá vốn.
+- Chi phí bán hàng.
+- Chi phí quản lý.
+- Chi phí tài chính.
+- Chi phí đầu tư.
+- Khấu hao/phân bổ.
+- Dòng tiền.
+
+Ví dụ:
+
+1. Lương nhân viên Marketing đã ghi trong ngân sách nhân sự thì không cộng thêm lần thứ hai vào chi phí Marketing.
+
+2. Hoa hồng CTV đã trừ khỏi lãi đóng góp thì không được trừ lại trong chi phí cố định.
+
+3. Tiền mua tủ lạnh là dòng tiền đầu tư. Không được đồng thời trừ toàn bộ giá trị tủ lạnh vào P&L tháng đầu và tiếp tục trừ khấu hao các tháng sau.
+
+4. Hàng nhập kho chưa bán không tự động trở thành toàn bộ giá vốn hàng bán.
+
+5. Chi phí chung phân bổ giữa các cửa hàng không làm tăng tổng chi phí toàn công ty.
+
+6. Doanh thu chuyển hàng nội bộ không được cộng vào doanh thu hợp nhất.
+
+7. Chi phí Marketing đã được ghi nhận trong ngân sách tháng không được tự động trừ thêm vào từng đơn hàng; nếu có phân bổ để phân tích hiệu quả đơn hàng thì phải đánh dấu đó là chi phí phân bổ phục vụ phân tích.
+
+Thiết kế hệ thống bằng mã định danh duy nhất cho khoản chi phí, sản phẩm, kênh bán, tài sản và kỳ kế hoạch.
+
+---
+
+# XVI. LƯU TRỮ VÀ TƯƠNG TÁC
+
+Không cần database hoặc tài khoản đăng nhập.
+
+Yêu cầu:
+
+- Tự động lưu dữ liệu trên trình duyệt.
+- Chỉnh sửa trực tiếp trên bảng.
+- Hỗ trợ thêm, sửa, xóa, nhân bản dòng.
+- Undo thao tác.
+- Tự động định dạng VNĐ và phần trăm.
+- Có chức năng nhập/xuất dữ liệu.
+- Export dữ liệu ra Excel.
+- Export/Import toàn bộ cấu hình và kế hoạch bằng JSON.
+- Có dữ liệu mẫu khi mở lần đầu.
+- Có tùy chọn Reset.
+- Có xác nhận trước khi xóa.
+- Thông báo khi có lỗi dữ liệu.
+
+Dữ liệu lưu trên một trình duyệt không tự đồng bộ sang trình duyệt hoặc máy tính khác. Cần hiển thị hướng dẫn sao lưu rõ ràng.
+
+Không sử dụng dữ liệu demo để che các công thức chưa được xây dựng.
+
+---
+
+# XVII. TIÊU CHÍ NGHIỆM THU
+
+Ứng dụng chỉ được xem là hoàn thiện khi đạt các yêu cầu:
+
+### Kiểm thử giá vốn
+
+- Gà sống 2 kg, giá mua 65.000đ/kg, tỷ lệ thu hồi 70%.
+- Giá mua gà = 130.000đ.
+- Thành phẩm = 1,4 kg.
+- Giá bán 180.000đ/kg.
+- Doanh thu gộp = 252.000đ.
+
+### Kiểm thử hoa hồng
+
+- Nếu lãi đóng góp trước thưởng là 80.000đ.
+- CTV hưởng 15.000đ.
+- Lãi đóng góp sau thưởng là 65.000đ.
+
+### Kiểm thử chi phí cố định
+
+- Nếu tăng chi phí cố định thêm 20 triệu/tháng.
+- Lợi nhuận hoạt động tháng phải giảm đúng 20 triệu, với điều kiện các yếu tố khác không đổi.
+
+### Kiểm thử đầu tư
+
+- Đầu tư thiết bị 120 triệu.
+- Thời gian khấu hao 60 tháng.
+- Không có giá trị thu hồi.
+- Khấu hao mô phỏng = 2 triệu/tháng đủ điều kiện.
+- Dòng tiền đầu tư ghi nhận 120 triệu tại lịch thanh toán.
+- Không đưa toàn bộ 120 triệu vào chi phí hoạt động tháng đầu.
+
+### Kiểm thử điểm hòa vốn
+
+- Chi phí cố định = 120 triệu.
+- Lãi đóng góp = 60.000đ/con.
+- Sản lượng hòa vốn = 2.000 con.
+
+### Kiểm thử nhiều kênh
+
+Nếu có hai kênh:
+
+- Kênh A bán 1.000 con, lãi đóng góp 70.000đ/con.
+- Kênh B bán 1.000 con, lãi đóng góp 30.000đ/con.
+
+Tổng lãi đóng góp = 100 triệu.
+
+Lãi đóng góp bình quân = 50.000đ/con.
+
+### Kiểm thử dòng tiền
+
+- Tiền đầu kỳ: 100 triệu.
+- Thu tiền: 200 triệu.
+- Chi hoạt động: 150 triệu.
+- Chi đầu tư: 80 triệu.
+- Không có dòng tiền khác.
+
+Tiền cuối kỳ phải bằng 70 triệu.
+
+### Kiểm thử chỉnh sửa tức thì
+
+Thay đổi một giá trị đầu vào phải cập nhật tất cả KPI, biểu đồ và báo cáo phụ thuộc mà không cần tải lại trang.
+
+### Kiểm thử tổng hợp
+
+Tổng doanh thu, giá vốn, chi phí và lợi nhuận theo từng sản phẩm, từng kênh phải đối chiếu khớp với báo cáo toàn công ty trong cùng phạm vi và kỳ tính toán.
+
+Không được có NaN, Infinity, giá trị tính sai đơn vị hoặc báo cáo thiếu cân đối.
+
+---
+
+# XVIII. YÊU CẦU TRIỂN KHAI CUỐI CÙNG
+
+Hãy xây dựng ứng dụng hoàn chỉnh, không chỉ tạo giao diện minh họa.
+
+Ưu tiên triển khai và kiểm chứng theo thứ tự:
+
+1. Mô hình dữ liệu và đơn vị tính.
+2. Bộ công thức giá vốn và doanh thu.
+3. Bộ công thức chi phí, hoa hồng và lợi nhuận.
+4. Vốn đầu tư, khấu hao và chi phí cố định.
+5. Dòng tiền.
+6. Dashboard và Quick Edit.
+7. Kịch bản tài chính.
+8. Nhập/xuất và lưu trữ dữ liệu.
+9. Kiểm thử toàn bộ công thức.
+10. Tối ưu giao diện và trải nghiệm.
+
+Không phát triển những chức năng ngoài phạm vi cần thiết.
+
+**Kết quả mong muốn:**
+
+Một ứng dụng quản trị tài chính kinh doanh Organic Việt Nam đơn giản, chuyên nghiệp và có thể sử dụng thực tế.
+
+Người dùng chỉ cần nhập các thông số đầu vào hoặc chỉnh sửa chi phí, giá bán, sản lượng thì toàn bộ doanh thu, giá vốn, lợi nhuận, điểm hòa vốn và dòng tiền được tính lại chính xác.
+
+Ưu tiên tính đúng trước, giao diện dễ sử dụng thứ hai và các tính năng bổ sung sau cùng.
